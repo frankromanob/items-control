@@ -1,6 +1,6 @@
 'use client'
-import { FormEvent, useState } from 'react'
-import { SaveOutlined } from '@mui/icons-material';
+import { useState } from 'react'
+import { DeleteOutline, SaveOutlined } from '@mui/icons-material';
 import { Divider, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { ICustomer } from '@/interfaces';
 import { validations } from '@/utils';
 import { useRouter } from 'next/navigation';
-import myApi from '@/app/lib/myApi';
+import { toast } from 'react-toastify';
 
 
 interface formData {
@@ -56,32 +56,24 @@ export default function CustomersView({ customerId }: Props) {
         }
     }
 
-    const router=useRouter()
+    const router = useRouter()
 
     const onSubmit = async (form: formData) => {
 
         setIsSaving(true)
-        console.log(form)
-        
+        // console.log(form)
+
         try {
-            const respuesta = await fetch('/api/customers',{
+            const respuesta = await fetch('/api/customers', {
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form)
             })
-            // const respuesta = await myApi({
-            //     url: '/customers',
-            //     method: form._id ? 'PUT' : 'POST',
-            //     data: {firstName:form.firstName,}
-            // })
-            //console.log(respuesta)
 
-            if(respuesta.statusText==='OK'){
+            if (respuesta.statusText === 'OK') {
                 router.push('/clientes')
             }
 
             setIsSaving(false)
-
-
         } catch (error) {
             setIsSaving(false)
             console.log(error)
@@ -89,6 +81,24 @@ export default function CustomersView({ customerId }: Props) {
 
     }
 
+
+    const onDelete = async (customerId: string) => {
+        try {
+            const respuesta = await fetch('/api/customers', {
+                method: 'DELETE',
+                body: JSON.stringify(customerId)
+            })
+
+            if (respuesta.statusText === 'OK') {
+                router.push('/clientes')
+                alert('Cliente eliminado correctamente')
+            }
+
+        } catch (error) {
+            setIsSaving(false)
+            console.log(error)
+        }
+    }
 
     return (
 
@@ -104,7 +114,7 @@ export default function CustomersView({ customerId }: Props) {
                             //value={customer.firstName}
                             id='fistName'
                             name='firstName'
-                            autoComplete='true'
+                            autoComplete='false'
                             sx={{ mb: 1 }}
                             {...register('firstName', {
                                 required: 'Este campo es requerido',
@@ -118,7 +128,7 @@ export default function CustomersView({ customerId }: Props) {
                             label="Apellido"
                             variant="outlined"
                             fullWidth
-                            autoComplete='true'
+                            autoComplete='false'
                             //value={customer.lastName}
                             id='lastName'
                             name='lastName'
@@ -134,7 +144,7 @@ export default function CustomersView({ customerId }: Props) {
                             label="Email"
                             variant="outlined"
                             fullWidth
-                            autoComplete='true'
+                            autoComplete='false'
                             //value={customer.email}
                             id='email'
                             name='email'
@@ -150,7 +160,7 @@ export default function CustomersView({ customerId }: Props) {
                         <TextField
                             label="Telefono"
                             variant="outlined"
-                            autoComplete='true'
+                            autoComplete='false'
                             //value={customer.phone}
                             id='phone'
                             name='phone'
@@ -162,11 +172,20 @@ export default function CustomersView({ customerId }: Props) {
                         />
 
                         <Divider sx={{ my: 1 }} />
-                        <Box display='flex' justifyContent='flex-end' sx={{ mb: 1 }}>
+                        <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ mb: 1 }}>
+                            <Button
+                                color="error"
+                                startIcon={<DeleteOutline />}
+                                sx={{ width: '100px', height: '30px', marginInlineEnd: '20px' }}
+                                type="button"
+                                onClick={() => onDelete(getValues('_id'))}
+                            >
+                                Eliminar
+                            </Button>
                             <Button
                                 color="secondary"
                                 startIcon={<SaveOutlined />}
-                                sx={{ width: '150px' }}
+                                sx={{ width: '150px', height: '30px' }}
                                 type="submit"
                                 disabled={isSaving}
                             >

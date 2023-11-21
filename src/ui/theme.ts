@@ -13,7 +13,10 @@ export const mainTheme = createTheme({
     },
     info:{
         main: '#6fabd0'
-    }
+    },
+    error:{
+        main: '#E77577'
+    },
   },
   components: {
     MuiLink: {
