@@ -1,26 +1,28 @@
 'use client'
 
-import { AddOutlined } from '@mui/icons-material'
-import { Box, Button, CardMedia, Grid, Link } from '@mui/material'
+import { CardMedia, Grid, Link, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import React from 'react'
 import useSWR from 'swr'
 import { currency } from '@/utils';
 import NextLink from 'next/link';
 import { IProduct } from '@/interfaces';
+import { useEffect, useState } from 'react';
 
 
 const columns: GridColDef[] = [
   {
     field: 'img',
     headerName: 'Foto',
+    width: 100,
     renderCell: ({ row }) => {
       return (
-        <a href={`/product/${row.slug}`} target='_blank'>
+        <a href={`/product/${row.slug}`} target='_blank' style={{ margin: '5px' }}>
           <CardMedia
             component='img'
             className='fadeIn'
             image={`${row.img}`}
+            height={'50'}
+            width={'100'}
           />
         </a>
       )
@@ -39,26 +41,32 @@ const columns: GridColDef[] = [
       )
     }
   },
-  { field: 'description', headerName: 'Descripción', width: 100 },
+  //{ field: 'description', headerName: 'Descripción', width: 200 },
   { field: 'type', headerName: 'Tipo', width: 120 },
   { field: 'inStock', headerName: 'Existencia', width: 100, align: 'center' },
   { field: 'costo', headerName: 'Costo', width: 100 },
-  { field: 'pv', headerName: 'PV', width: 50 },
-  { field: 'bv', headerName: 'BV', width: 50 },
-  { field: 'sizes', headerName: 'Tamaño', width: 200 },
+  { field: 'pv', headerName: 'PV', width: 100 },
+  { field: 'bv', headerName: 'BV', width: 100 },
+  { field: 'ibo', headerName: 'IBO', width: 100 },
+  //{ field: 'sizes', headerName: 'Tamaño', width: 200 },
 ]
 
-const onFetchProducts= ()=>{
-   // const fetcher= (url:string) => fetch(url).then((res) => res.json());
-    const {data,error,isLoading} =  useSWR<IProduct[]>('/api/products')
-   // console.log('Data: ',data,'Errors:', error,isLoading)
-    return ({data,error})
+const onFetchProducts = () => {
+  const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
+  return ({ data, error, isLoading })
 }
 
-export const ProductsList
-  =  () => {
 
-    const {data,error} = onFetchProducts()
+export const ProductsList
+  = () => {
+
+    const { data, error, isLoading } = onFetchProducts()
+
+    const [cargando, setCargando] = useState(false)
+
+    useEffect(() => {
+      setCargando(isLoading)
+    }, [isLoading])
 
     if (!data && !error) return <>{error}</>
 
@@ -69,36 +77,31 @@ export const ProductsList
       type: product.type,
       inStock: product.inStock,
       costo: currency.format(product.costo),
-      pv: currency.format(product.pv),
+      pv: product.pv,
       bv: currency.format(product.bv),
+      ibo: 0,
       sizes: product.sizes,
       slug: product.slug,
       description: product.description,
     }))
 
     return (
-
-
-
-      
-
-      // <AdminLayout title={`Productos (${data?.length})`} subTitle={'Administración de Productos'} icon={<CategoryOutlined />}>
-      <>
-        <Box display='flex' justifyContent='end' sx={{ mb: 1 }} >
-          <Button
-            startIcon={<AddOutlined />}
-            color='secondary'
-            href='/admin/products/new'
-          >
-            Crear Producto
-          </Button>
-
-        </Box>
-        <Grid container className='fadeIn'>
-          <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
-            <DataGrid
+      cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
+      :<>
+        <Grid key='productGrid' container className='fadeIn'  >
+          <Grid item lg={12} xs={6} sx={{ height: 650, width: '100%' }}>
+            <DataGrid sx={{
+              boxShadow: 2,
+              border: 1,
+              borderColor: 'teal',
+              color: 'secondary.main',
+              '& .MuiDataGrid-cell:hover': {
+                color: 'primary.main',
+              },
+            }}
               rows={rows}
               columns={columns}
+              autoPageSize
             />
           </Grid>
         </Grid>

@@ -15,3 +15,21 @@ export const getAllProducts = async (): Promise<IProduct[]> => {
     return JSON.parse(JSON.stringify(updatedProducts))
 
 }
+
+
+export const getProductBySlug = async (slug: string): Promise<IProduct | null> => {
+    await db.connect()
+    const product = await Products.findOne({ slug }).lean()
+    await db.disconnect()
+
+    if (product) {
+        product.images = product.images.map(image => {
+            return image.includes('http') ? image : `${process.env.HOST_NAME}/${image}`
+        })
+        return JSON.parse(JSON.stringify(product));
+    } else {
+        return null
+    }
+
+
+}

@@ -8,6 +8,7 @@ const productSchema = new Schema({
     costo: { type: Number, required: true, default: 0 },
     pv: { type: Number, required: true, default: 0 },
     bv: { type: Number, required: true, default: 0 },
+    ibo: {type: Number, required: true, default: 0 },
     slug: { type: String, required: true, unique: true },
     tags: [{ type: String }],
     title: { type: String, required: true },

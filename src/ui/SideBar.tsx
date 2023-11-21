@@ -1,7 +1,11 @@
 'use client'
 import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { AccountCircleOutlined } from "@mui/icons-material"
 import { useRouter } from "next/navigation";
+import CategoryIcon from '@mui/icons-material/Category';
+import LogoutIcon from '@mui/icons-material/Logout';
+import GroupIcon from '@mui/icons-material/Group';
+import SouthIcon from '@mui/icons-material/South';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 
 export const SideBar = () => {
 
@@ -15,36 +19,40 @@ export const SideBar = () => {
     }
 
     return (
-        <Box>
-            <Typography>
+        <Box >
+            <Typography variant='h2' color='secondary'>
                 Menu principal
             </Typography>
             <Divider />
             <List >
                 <ListItemButton onClick={() => onHandleclick('/')} >
+                    <ListItemIcon> <CategoryIcon /> </ListItemIcon>
+                    <ListItemText  primary={<Typography color='primary'>Mis productos</Typography>}/>
+                </ListItemButton>
+                <ListItemButton onClick={() => onHandleclick('/clientes')} >
                     <ListItemIcon>
-                        <AccountCircleOutlined />
+                        <GroupIcon />
                     </ListItemIcon>
-                    <ListItemText primary={'Resumen de items'} />
+                    <ListItemText primary={<Typography color='primary'>Mis clientes</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/salidas')} >
                     <ListItemIcon>
-                        <AccountCircleOutlined />
+                        <ArrowOutwardIcon />
                     </ListItemIcon>
-                    <ListItemText primary={'Registrar salida'} />
+                    <ListItemText primary={<Typography color='primary'>Salidas</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/entradas')} >
                     <ListItemIcon>
-                        <AccountCircleOutlined />
+                        <SouthIcon />
                     </ListItemIcon>
-                    <ListItemText primary={'Entradas'} />
+                    <ListItemText primary={<Typography color='primary'>Entradas</Typography>} />
                 </ListItemButton>
                 <Divider />
                 <ListItemButton  onClick={logOff}>
                     <ListItemIcon>
-                        <AccountCircleOutlined  />
+                        <LogoutIcon  />
                     </ListItemIcon>
-                    <ListItemText primary={'Cerrar sesión'} />
+                    <ListItemText primary={<Typography color='primary'>Cerrar sesión</Typography>} />
                 </ListItemButton>
             </List>
         </Box>

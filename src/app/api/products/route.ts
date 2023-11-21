@@ -9,7 +9,9 @@ type Data =
 
 export async function GET(req: NextApiRequest, res: NextApiResponse<Data>) {
     await db.connect()
-    const products = await Products.find().sort({ title: 'asc' }).lean()
+   
+    let products = await Products.find().sort({ title: 'asc' }).lean()
+
     await db.disconnect()
 
 
@@ -21,5 +23,5 @@ export async function GET(req: NextApiRequest, res: NextApiResponse<Data>) {
     })
 
     return Response.json(updatedProducts)
-   // return Response.json({ message: 'Example' })
+    // return Response.json({ message: 'Example' })
 }

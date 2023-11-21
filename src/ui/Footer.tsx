@@ -16,12 +16,12 @@ export const FooterPage = () => {
 
     return (
         < >
-            <Divider light />
-            <Box display='flex' flexDirection='row' justifyContent='flex-end'>
-                <Grid container justifyContent='end' display='flex' flexDirection='row' marginInlineEnd='50px' >
+            <Divider flexItem />
+            <Box  >
+                <Grid container display='flex' flexDirection='row'  >
                     {redes.map(({ name, link, icon }) => (
                         <Grid item key={link} margin='5px'>
-                            <Link href={link} target="_blank">
+                            <Link href={link} target="_blank" color='secondary'>
                                 {icon}
                             </Link>
                         </Grid>
