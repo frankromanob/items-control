@@ -4,11 +4,11 @@ import { v2 as cloudinary } from 'cloudinary'
 cloudinary.config(process.env.CLOUDINARY_URL || '')
 
 
-export const config = {
-    api: {
-        bodyParser: false
-    }
-}
+// export const config = {
+//     api: {
+//         bodyParser: false
+//     }
+// }
 
 export async function POST(request: Request) {
 

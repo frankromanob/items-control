@@ -105,7 +105,6 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     const customerId = await request.json()
-   
 
     if (!isValidObjectId(customerId)) {
         console.log('Id incorrecto')
@@ -113,7 +112,7 @@ export async function DELETE(request: Request) {
     }
 
     await db.connect()
-    const customer = await Customers.findById({ _id:customerId })
+    const customer = await Customers.findById({ _id: customerId })
     if (!customer) {
         await db.disconnect()
         console.log('El cliente no existe')
