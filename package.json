@@ -17,6 +17,7 @@
     "@mui/x-data-grid": "^6.18.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/formidable": "^3.4.5",
+    "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.0",
     "mongo": "^0.1.0",
