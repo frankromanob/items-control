@@ -6,7 +6,8 @@ import useSWR from 'swr'
 import { currency } from '@/utils';
 import NextLink from 'next/link';
 import { IProduct } from '@/interfaces';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+
 
 
 const columns: GridColDef[] = [
@@ -16,7 +17,7 @@ const columns: GridColDef[] = [
     width: 100,
     renderCell: ({ row }) => {
       return (
-        <a href={`/product/${row.slug}`} target='_blank' style={{ margin: '5px' }}>
+        <a href={`/products/${row.slug}`} target='_blank' style={{ margin: '5px' }}>
           <CardMedia
             component='img'
             className='fadeIn'
@@ -33,7 +34,7 @@ const columns: GridColDef[] = [
     field: 'title', headerName: 'Producto', width: 350,
     renderCell: ({ row }) => {
       return (
-        <NextLink href={`/admin/products/${row.slug}`} passHref legacyBehavior>
+        <NextLink href={`/admin/productos/${row.slug}`} passHref legacyBehavior>
           <Link underline='always'>
             {row.title}
           </Link>
@@ -57,19 +58,19 @@ const onFetchProducts = () => {
 }
 
 
-export const ProductsList
-  = () => {
+export const ProductsList = () => {
 
     const { data, error, isLoading } = onFetchProducts()
-
     const [cargando, setCargando] = useState(false)
 
     useEffect(() => {
       setCargando(isLoading)
     }, [isLoading])
-
+    
     if (!data && !error) return <>{error}</>
 
+
+    
     const rows = data!.map((product) => ({
       id: product._id,
       img: product.images[0],
@@ -79,7 +80,7 @@ export const ProductsList
       costo: currency.format(product.costo),
       pv: product.pv,
       bv: currency.format(product.bv),
-      ibo: 0,
+      ibo: product.ibo,
       sizes: product.sizes,
       slug: product.slug,
       description: product.description,
@@ -89,7 +90,7 @@ export const ProductsList
       cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
       :<>
         <Grid key='productGrid' container className='fadeIn'  >
-          <Grid item lg={12} xs={6} sx={{ height: 650, width: '100%' }}>
+          <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
             <DataGrid sx={{
               boxShadow: 2,
               border: 1,
@@ -106,7 +107,6 @@ export const ProductsList
           </Grid>
         </Grid>
 
-        {/* </AdminLayout> */}
       </>
     )
   }

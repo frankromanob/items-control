@@ -4,3 +4,4 @@ export * as seedDataUsers from './users'
 export * as seedDataCustomers from './customers'
 
 export * as dbCustomers from './dbCustomers'
+export * as dbProducts from './dbProducts'

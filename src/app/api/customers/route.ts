@@ -2,7 +2,7 @@ import { db } from '@/database'
 import { ICustomer } from '@/interfaces'
 import Customers from '@/models/Customers'
 import { isValidObjectId } from 'mongoose'
-import type { NextApiRequest, NextApiResponse } from 'next'
+
 
 type Data =
     | { message: string }

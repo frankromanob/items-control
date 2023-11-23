@@ -66,7 +66,7 @@ export const mainTheme = createTheme({
         root: {
           textTransform: 'none',
           boxShadow: 'none',
-          borderRadius: 10,
+          borderRadius: 5,
           ":hover": {
             backgroundColor: '#d7f0e9',
             transition: 'all 0.3s ease-in-out'

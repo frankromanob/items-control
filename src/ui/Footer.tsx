@@ -11,13 +11,13 @@ export const FooterPage = () => {
         { name: "X", link: "https://twitter.com/romanobfrank", icon: <TwitterIcon /> },
         { name: "LinkedIn", link: "https://www.linkedin.com/in/francisco-romano-batista/", icon: <LinkedInIcon /> },
         { name: "GitHub", link: "https://github.com/frankromanob", icon: <GitHubIcon /> },
-        { name: "Mail", link: "mailto:romano.fr@gmail.com", icon: <MailIcon/> },
+        { name: "Mail", link: "mailto:romano.fr@gmail.com", icon: <MailIcon /> },
     ]
 
     return (
         < >
-            <Divider flexItem />
-            <Box  >
+
+            <Box sx={{ width: '190px', mt: 2 }}  >
                 <Grid container display='flex' flexDirection='row'  >
                     {redes.map(({ name, link, icon }) => (
                         <Grid item key={link} margin='5px'>

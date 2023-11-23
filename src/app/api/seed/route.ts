@@ -25,11 +25,11 @@ const setSeed = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await Users.deleteMany();
     await Users.insertMany(seedDataUsers.initialDataUsers.users)
 
-    await Customers.deleteMany();
-    await Customers.insertMany(seedDataCustomers.initialDataCustomers.customers)
+    // await Customers.deleteMany();
+    // await Customers.insertMany(seedDataCustomers.initialDataCustomers.customers)
 
-    await Products.deleteMany();
-    await Products.insertMany(seedDataProducts.initialDatProducts.products)
+    // await Products.deleteMany();
+    // await Products.insertMany(seedDataProducts.initialDatProducts.products)
 
 
     await db.disconnect()

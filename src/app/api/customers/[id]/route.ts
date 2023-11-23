@@ -1,6 +1,5 @@
 import { db } from '@/database'
 import Customers from '@/models/Customers'
-import { error } from 'console';
 import mongoose from 'mongoose';
 
 

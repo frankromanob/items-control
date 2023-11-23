@@ -1,3 +1,5 @@
 export * from  './products'
 export * from './users'
 export * from './customers'
+export * from './entries'
+export * from './orders'

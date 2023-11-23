@@ -5,6 +5,7 @@ export interface IProduct {
     inStock: number;
     pv: number;
     bv: number;
+    ibo: number;
     costo: number;
     sizes: string;
     slug: string;

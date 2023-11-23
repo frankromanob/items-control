@@ -14,11 +14,11 @@ export default function Customers() {
   >
     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
-      <Box display='flex' justifyContent='space-between'  >
-        <Typography color='secondary'>Mis clientes</Typography>
+    <Box sx={{ display:'flex',  flexDirection : { xs:'column',sm:'row'},  }}   >
+          {/* <Typography sx={{ mr:3, display : { xs:'none',sm:'block'}}}  color='secondary'>Mis clientes</Typography> */}
         <Button
           size='small'
-          sx={{ height: '20px' }}
+          sx={{ height: '20px', width:'200px', mb:1 }}
           startIcon={<AddOutlined />}
           color='secondary'
           href='/admin/clientes/nuevo'

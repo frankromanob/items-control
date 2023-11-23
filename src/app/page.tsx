@@ -4,6 +4,7 @@ import ProductsList from '../components/ProductList'
 import { SWRConfig } from 'swr'
 import { AddOutlined } from '@mui/icons-material'
 
+
 export default function Home() {
   return (
     <SWRConfig
@@ -12,21 +13,23 @@ export default function Home() {
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
-        <Box display='flex' justifyContent='space-between'  >
-          <Typography color='secondary'>Resumen de productos</Typography>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'flex-start' }}   >
+          {/* <Typography sx={{ mr:3,  display : { xs:'none',sm:'block'}}} color='secondary'>Resumen de productos</Typography> */}
           <Button
             size='small'
-            sx={{ height: '20px' }}
+            sx={{ height: '20px', width: '200px', mb: 1 }}
             startIcon={<AddOutlined />}
             color='secondary'
-            href='/admin/productos/new'
+            href='/admin/productos/nuevo'
           >
             Agregar Producto
           </Button>
         </Box>
+
         <ProductsList />
+
       </Box>
     </SWRConfig>
   )

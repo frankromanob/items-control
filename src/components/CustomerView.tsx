@@ -8,7 +8,6 @@ import useSWR from 'swr'
 import { ICustomer } from '@/interfaces';
 import { validations } from '@/utils';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
 
 
 interface formData {
@@ -61,7 +60,7 @@ export default function CustomersView({ customerId }: Props) {
     const onSubmit = async (form: formData) => {
 
         setIsSaving(true)
-        // console.log(form)
+  
 
         try {
             const respuesta = await fetch('/api/customers', {
@@ -105,13 +104,12 @@ export default function CustomersView({ customerId }: Props) {
         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
             <form name='customerForm' onSubmit={handleSubmit(onSubmit)}>
-                <Grid container spacing={2} m={1}>
-                    <Grid item xs={12} sm={6}>
+                <Grid container spacing={2} mt={1}>
+                    <Grid item xs={10}>
                         <TextField
                             label="Nombre"
                             variant='outlined'
                             fullWidth
-                            //value={customer.firstName}
                             id='fistName'
                             name='firstName'
                             autoComplete='false'
@@ -129,7 +127,6 @@ export default function CustomersView({ customerId }: Props) {
                             variant="outlined"
                             fullWidth
                             autoComplete='false'
-                            //value={customer.lastName}
                             id='lastName'
                             name='lastName'
                             sx={{ mb: 1 }}
@@ -145,7 +142,6 @@ export default function CustomersView({ customerId }: Props) {
                             variant="outlined"
                             fullWidth
                             autoComplete='false'
-                            //value={customer.email}
                             id='email'
                             name='email'
                             sx={{ mb: 1 }}
@@ -161,7 +157,6 @@ export default function CustomersView({ customerId }: Props) {
                             label="Telefono"
                             variant="outlined"
                             autoComplete='false'
-                            //value={customer.phone}
                             id='phone'
                             name='phone'
                             fullWidth

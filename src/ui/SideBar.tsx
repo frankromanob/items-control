@@ -19,40 +19,40 @@ export const SideBar = () => {
     }
 
     return (
-        <Box >
-            <Typography variant='h2' color='secondary'>
+        <Box sx={{ width: '190px' }}>
+            <Typography sx={{ display: { xs: 'none', sm: 'block' } }} variant='h2' color='secondary'>
                 Menu principal
             </Typography>
-            <Divider />
-            <List >
+            <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
+            <List sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' } }}  >
                 <ListItemButton onClick={() => onHandleclick('/')} >
                     <ListItemIcon> <CategoryIcon /> </ListItemIcon>
-                    <ListItemText  primary={<Typography color='primary'>Mis productos</Typography>}/>
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis productos</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/clientes')} >
                     <ListItemIcon>
                         <GroupIcon />
                     </ListItemIcon>
-                    <ListItemText primary={<Typography color='primary'>Mis clientes</Typography>} />
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis clientes</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/salidas')} >
                     <ListItemIcon>
                         <ArrowOutwardIcon />
                     </ListItemIcon>
-                    <ListItemText primary={<Typography color='primary'>Salidas</Typography>} />
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Salidas</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/entradas')} >
                     <ListItemIcon>
                         <SouthIcon />
                     </ListItemIcon>
-                    <ListItemText primary={<Typography color='primary'>Entradas</Typography>} />
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Entradas</Typography>} />
                 </ListItemButton>
-                <Divider />
-                <ListItemButton  onClick={logOff}>
+                <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
+                <ListItemButton onClick={logOff}>
                     <ListItemIcon>
-                        <LogoutIcon  />
+                        <LogoutIcon />
                     </ListItemIcon>
-                    <ListItemText primary={<Typography color='primary'>Cerrar sesión</Typography>} />
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Cerrar sesión</Typography>} />
                 </ListItemButton>
             </List>
         </Box>
