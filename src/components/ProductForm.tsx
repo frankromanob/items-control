@@ -32,7 +32,7 @@ interface Props {
 
 
 export default function ProductForm({ producto }: Props) {
-    
+
     const router = useRouter()
 
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } =
@@ -56,7 +56,7 @@ export default function ProductForm({ producto }: Props) {
     }, [watch, setValue])
 
 
-    
+
 
     // Imagenes
 
@@ -117,18 +117,18 @@ export default function ProductForm({ producto }: Props) {
             setIsSaving(false)
         } catch (error) {
             setIsSaving(false)
-            alert('Ha ocurrido un error. '+error)
+            alert('Ha ocurrido un error. ' + error)
             console.log(error)
         }
 
     }
 
 
-    const onDelete = async (productId: string,images:string[]) => {
+    const onDelete = async (productId: string, images: string[]) => {
         try {
             const respuesta = await fetch('/api/products', {
                 method: 'DELETE',
-                body: JSON.stringify(productId,images)
+                body: JSON.stringify(productId, images)
             })
 
             if (respuesta.statusText === 'OK') {
@@ -432,7 +432,7 @@ export default function ProductForm({ producto }: Props) {
                                 startIcon={<DeleteOutline />}
                                 sx={{ width: '100px', height: '30px', marginInlineEnd: '20px' }}
                                 type="button"
-                                onClick={() => onDelete(getValues('_id'),getValues('images'))}
+                                onClick={() => onDelete(getValues('_id'), getValues('images'))}
                             >
                                 Eliminar
                             </Button>
