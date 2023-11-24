@@ -52,20 +52,21 @@ const columns: GridColDef[] = [
   //{ field: 'sizes', headerName: 'Tamaño', width: 200 },
 ]
 
-const onFetchProducts = () => {
-  const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
-  return ({ data, error, isLoading })
-}
+// const onFetchProducts = () => {
+//   const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
+//   return ({ data, error, isLoading })
+// }
 
 
 export const ProductsList = () => {
 
-    const { data, error, isLoading } = onFetchProducts()
-    const [cargando, setCargando] = useState(false)
+    //const { data, error, isLoading } = onFetchProducts()
+    const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
+    // const [cargando, setCargando] = useState(false)
 
-    useEffect(() => {
-      setCargando(isLoading)
-    }, [isLoading])
+    // useEffect(() => {
+    //   setCargando(isLoading)
+    // }, [isLoading])
     
     if (!data && !error) return <>{error}</>
 
@@ -87,8 +88,9 @@ export const ProductsList = () => {
     }))
 
     return (
-      cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
-      :<>
+      // cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
+      // :
+      <>
         <Grid key='productGrid' container className='fadeIn'  >
           <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
             <DataGrid sx={{

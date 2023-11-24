@@ -32,7 +32,8 @@ interface Props {
 
 
 export default function ProductForm({ producto }: Props) {
-
+    
+    const router = useRouter()
 
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } =
         useForm<IProduct>({
@@ -55,7 +56,7 @@ export default function ProductForm({ producto }: Props) {
     }, [watch, setValue])
 
 
-    const router = useRouter()
+    
 
     // Imagenes
 
@@ -110,12 +111,13 @@ export default function ProductForm({ producto }: Props) {
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form)
             })
-    
             router.refresh()
+            alert('Cambios guardados correctamente')
 
             setIsSaving(false)
         } catch (error) {
             setIsSaving(false)
+            alert('Ha ocurrido un error. '+error)
             console.log(error)
         }
 

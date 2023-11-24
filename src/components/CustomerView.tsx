@@ -18,10 +18,10 @@ interface formData {
     phone: string;
 }
 
-const onFetchCustomer = (customerId: string) => {
-    const { data, error, isLoading } = useSWR<ICustomer>(`/api/customers/${customerId}`)
-    return ({ data, error })
-}
+// const onFetchCustomer = (customerId: string) => {
+//     const { data, error, isLoading } = useSWR<ICustomer>(`/api/customers/${customerId}`)
+//     return ({ data, error })
+// }
 
 
 
@@ -32,13 +32,14 @@ interface Props {
 
 export default function CustomersView({ customerId }: Props) {
     const [isSaving, setIsSaving] = useState(false)
-
+    const router = useRouter()
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } =
         useForm<ICustomer>({
             defaultValues: {}
         })
+    const { data, error, isLoading } = useSWR<ICustomer>(`/api/customers/${customerId}`)    
     if (customerId !== 'nuevo') {
-        const { data, error } = onFetchCustomer(customerId)
+    //    const { data, error } = onFetchCustomer(customerId)
         if (!data && !error) return <>{error}</>
 
         if (!data) {
@@ -55,26 +56,24 @@ export default function CustomersView({ customerId }: Props) {
         }
     }
 
-    const router = useRouter()
+   
 
     const onSubmit = async (form: formData) => {
 
         setIsSaving(true)
-  
+
 
         try {
             const respuesta = await fetch('/api/customers', {
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form)
             })
-
-            if (respuesta.statusText === 'OK') {
-                router.push('/clientes')
-            }
-
             setIsSaving(false)
+            alert('Cliente guardado correctamente.')
+            router.push('/clientes')
         } catch (error) {
             setIsSaving(false)
+            alert('Ha ocurrido un error. ' + error)
             console.log(error)
         }
 
@@ -89,10 +88,10 @@ export default function CustomersView({ customerId }: Props) {
             })
 
             if (respuesta.statusText === 'OK') {
-                router.push('/clientes')
                 alert('Cliente eliminado correctamente')
             }
 
+            router.push('/clientes')
         } catch (error) {
             setIsSaving(false)
             console.log(error)

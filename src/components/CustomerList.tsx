@@ -27,21 +27,22 @@ const columns: GridColDef[] = [
   { field: 'phone', headerName: 'Teléfono', width: 120, align: 'right', headerAlign: 'right' },
 ]
 
-const onFetchCustomers = () => {
-  const { data, error, isLoading } = useSWR<ICustomer[]>('/api/customers')
-  return ({ data, error, isLoading })
-}
+// const onFetchCustomers = () => {
+//   const { data, error, isLoading } = useSWR<ICustomer[]>('/api/customers')
+//   return ({ data, error, isLoading })
+// }
 
 export const CustomersList
   = () => {
 
-    const { data, error, isLoading } = onFetchCustomers()
+    //const { data, error, isLoading } = onFetchCustomers()
+    const { data, error, isLoading } = useSWR<ICustomer[]>('/api/customers')
 
-    const [cargando, setCargando] = useState(false)
+    // const [cargando, setCargando] = useState(false)
 
-    useEffect(() => {
-      setCargando(isLoading)
-    }, [isLoading])
+    // useEffect(() => {
+    //   setCargando(isLoading)
+    // }, [isLoading])
 
     if (!data && !error) return <> {error}</>
 
@@ -56,8 +57,9 @@ export const CustomersList
     }))
 
     return (
-      cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
-        : <>
+      // cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
+      //   : 
+      <>
           <Grid container className='fadeIn' >
             <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
               <DataGrid sx={{

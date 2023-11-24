@@ -9,17 +9,17 @@ type Data = {
     message: string
 }
 
-export function PUT(req: NextApiRequest, res: NextApiResponse<Data>) {
+export function PUT() {
 
     if (process.env.NODE_ENV === 'production') {
-        return res.status(401).json({ message: 'No es posible para producción' })
+        return new Response('No es posible para producción', { status: 400 })
     }
-    return setSeed(req, res)
+    return setSeed()
 
 
 }
 
-const setSeed = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const setSeed = async () => {
 
     await db.connect()
     await Users.deleteMany();

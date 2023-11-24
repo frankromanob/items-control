@@ -9,7 +9,7 @@ type Data =
     | { message: string }
     | IProduct[]
 
-export async function GET(req: NextApiRequest, res: NextApiResponse<Data>) {
+export async function GET() {
     await db.connect()
 
     let products = await Products.find().sort({ title: 'asc' }).lean()

@@ -4,20 +4,20 @@ import { IProduct } from '@/interfaces';
 import ProductForm from "@/components/ProductForm";
 
 
-const onFetchProduct = (slug: string) => {
-    const { data, error, isLoading } = useSWR<IProduct>(`/api/products/${slug}`)
-    return ({ data, error })
-}
+// const onFetchProduct = (slug: string) => {
+//     const { data, error, isLoading } = useSWR<IProduct>(`/api/products/${slug}`)
+//     return ({ data, error })
+// }
 
 interface Props {
     slug: string
 }
 
 export default function ProductView({ slug }: Props) {
-
+    const { data, error, isLoading } = useSWR<IProduct>(`/api/products/${slug}`)
     let product: IProduct | null
     if (slug !== 'nuevo') {
-        const { data, error } = onFetchProduct(slug)
+       // const { data, error } = onFetchProduct(slug)
         if (!data && !error) return <>{error}</>
         product = data
     } else {
