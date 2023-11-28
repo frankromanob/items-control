@@ -178,21 +178,7 @@ export default function ProductForm({ producto }: Props) {
                                     ))
                                 }
                             </Grid>
-                            {/* <TextField
-                                //label="Images"
-                                variant='outlined'
-                                fullWidth
-                                id='images'
-                                name='images'
-                                multiline
-                                sx={{ mb: 1 }}
-                                {...register('images', {
-                                    required: 'Este campo es requerido',
-                                    minLength: { value: 2, message: 'Mínimo 2 caracteres' }
-                                })}
-                                error={!!errors.images}
-                                helperText={errors.images?.message}
-                            /> */}
+
                             <Button
                                 color="secondary"
                                 fullWidth
@@ -227,17 +213,16 @@ export default function ProductForm({ producto }: Props) {
                                     label="Nombre"
                                     variant='outlined'
                                     fullWidth
-                                    //value={customer.firstName}
                                     id='title'
                                     name='title'
                                     autoComplete='false'
                                     sx={{ mb: 1 }}
                                     {...register('title', {
-                                        required: 'Este campo es requerido',
+                                        required: 'Se requiere el nombre del producto.',
                                         minLength: { value: 2, message: 'Mínimo 2 caracteres' }
                                     })}
                                     error={!!errors.title}
-                                //helperText={errors.firstName?.message}
+                                    helperText={errors.title?.message}
                                 />
                                 <TextField
                                     label="Slug"
@@ -249,8 +234,8 @@ export default function ProductForm({ producto }: Props) {
                                     autoComplete='false'
                                     sx={{ mb: 1 }}
                                     {...register('slug', {
-                                        required: 'Este campo es requerido',
-                                        minLength: { value: 2, message: 'Mínimo 2 caracteres' },
+                                        // required: 'Este campo es requerido',
+                                        // minLength: { value: 2, message: 'Mínimo 2 caracteres' },
                                         validate: (val) => val.trim().includes(' ') ? 'No puede tener espacios en blanco' : undefined
                                     })}
                                     error={!!errors.slug}
@@ -267,10 +252,10 @@ export default function ProductForm({ producto }: Props) {
                                     sx={{ mb: 1 }}
                                     {...register('pv', {
                                         required: 'Este campo es requerido',
-                                        minLength: { value: 0, message: 'Mínimo de valor cero' }
+                                        validate: (val) => val < 1 ? 'No puede ser menor a 1' : undefined
                                     })}
                                     error={!!errors.pv}
-                                //helperText={errors.lastName?.message}
+                                    helperText={errors.pv?.message}
                                 />
                                 <TextField
                                     label="BV"
@@ -282,10 +267,10 @@ export default function ProductForm({ producto }: Props) {
                                     sx={{ mb: 1 }}
                                     {...register('bv', {
                                         required: 'Este campo es requerido',
-                                        minLength: { value: 0, message: 'Mínimo de valor cero' }
+                                        validate: (val) => val < 1 ? 'No puede ser menor a 1' : undefined
                                     })}
                                     error={!!errors.bv}
-                                //helperText={errors.lastName?.message}
+                                    helperText={errors.bv?.message}
                                 />
                                 <TextField
                                     label="IBO"
@@ -297,10 +282,10 @@ export default function ProductForm({ producto }: Props) {
                                     sx={{ mb: 1 }}
                                     {...register('ibo', {
                                         required: 'Este campo es requerido',
-                                        minLength: { value: 0, message: 'Mínimo de valor cero' }
+                                        validate: (val) => val < 1 ? 'No puede ser menor a 1' : undefined
                                     })}
                                     error={!!errors.ibo}
-                                //helperText={errors.lastName?.message}
+                                    helperText={errors.ibo?.message}
                                 />
                             </Box>
                             <Box display='block' flexDirection='column'>
@@ -315,10 +300,10 @@ export default function ProductForm({ producto }: Props) {
                                     sx={{ mb: 1 }}
                                     {...register('inStock', {
                                         required: 'Este campo es requerido',
-                                        minLength: { value: 0, message: 'Mínimo de valor cero' }
+                                        validate: (val) => val < 0 ? 'No puede ser menor a 0' : undefined
                                     })}
                                     error={!!errors.inStock}
-                                //helperText={errors.email?.message}
+                                    helperText={errors.inStock?.message}
                                 />
                                 <TextField
                                     label="Tipo"
@@ -344,19 +329,7 @@ export default function ProductForm({ producto }: Props) {
                                     error={!!errors.sizes}
                                 //helperText={errors.phone?.message}
                                 />
-                                {/* <TextField
-                                    label="Tags"
-                                    variant="outlined"
-                                    autoComplete='false'
-                                    //value={customer.phone}
-                                    id='tags'
-                                    name='tags'
-                                    fullWidth
-                                    sx={{ mb: 1 }}
-                                    {...register('tags')}
-                                    error={!!errors.tags}
-                                //helperText={errors.phone?.message}
-                                /> */}
+ 
                                 <TextField
                                     label="Costo"
                                     variant="outlined"
@@ -365,9 +338,12 @@ export default function ProductForm({ producto }: Props) {
                                     name='costo'
                                     fullWidth
                                     sx={{ mb: 1 }}
-                                    {...register('costo')}
+                                    {...register('costo', {
+                                        required: 'Este campo es requerido',
+                                        validate: (val) => val < 0 ? 'No puede ser menor a 0' : undefined
+                                    })}
                                     error={!!errors.costo}
-                                //helperText={errors.phone?.message}
+                                    helperText={errors.costo?.message}
                                 />
 
 

@@ -9,8 +9,10 @@ type Data =
     | ICustomer[]
 
 export async function GET() {
+
     await db.connect()
     const customers = await Customers.find().sort({ title: 'asc' }).lean()
+
     await db.disconnect()
 
 

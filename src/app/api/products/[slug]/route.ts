@@ -1,28 +1,27 @@
 import { db } from '@/database'
 import Products from '@/models/Products'
+import { isValidObjectId } from 'mongoose';
 
 
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
-    const slug = params.slug;
-    let condition = {}
+    const { slug } = params;
+    let id = null;
 
-
-    if (slug !== '') {
-        condition = { slug }
+    if (isValidObjectId(slug)) {
+        id = slug
     }
 
     await db.connect()
-    const products = await Products.findOne(condition).lean()
+    const products = await Products.findOne({ $or: [{ slug }, { _id: id }] }).lean()
     await db.disconnect()
 
-    if (products) {
-        products.images = products.images.map(image => {
-            return image.includes('http') ? image : `${process.env.HOST_NAME}/${image}`
-        })
-        return Response.json(products)
-    } else {
-
+    if (!products) {
         return Response.json({ message: 'Producto no encontrado' })
     }
-    // return Response.json({ message: 'Example' })
+
+    products.images = products.images.map(image => {
+        return image.includes('http') ? image : `${process.env.HOST_NAME}/${image}`
+    })
+
+    return Response.json(products)
 }

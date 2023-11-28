@@ -35,11 +35,11 @@ export const SideBar = () => {
                     </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis clientes</Typography>} />
                 </ListItemButton>
-                <ListItemButton onClick={() => onHandleclick('/salidas')} >
+                <ListItemButton onClick={() => onHandleclick('/pedidos')} >
                     <ListItemIcon>
                         <ArrowOutwardIcon />
                     </ListItemIcon>
-                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Salidas</Typography>} />
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Pedidos</Typography>} />
                 </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/entradas')} >
                     <ListItemIcon>

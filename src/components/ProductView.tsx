@@ -4,10 +4,7 @@ import { IProduct } from '@/interfaces';
 import ProductForm from "@/components/ProductForm";
 
 
-// const onFetchProduct = (slug: string) => {
-//     const { data, error, isLoading } = useSWR<IProduct>(`/api/products/${slug}`)
-//     return ({ data, error })
-// }
+
 
 interface Props {
     slug: string

@@ -4,12 +4,6 @@ import { v2 as cloudinary } from 'cloudinary'
 cloudinary.config(process.env.CLOUDINARY_URL || '')
 
 
-// export const config = {
-//     api: {
-//         bodyParser: false
-//     }
-// }
-
 export async function POST(request: Request) {
     const resp = await uploadFile(request)
     return Response.json(resp)
@@ -37,28 +31,16 @@ const uploadFile = async (request: Request) => {
                 invalidate: true
             })
                 .then((result) => {
-                    console.log(result);
                     resolve(result);
                 })
                 .catch((error) => {
-                    console.log(error);
                     reject(error);
                 });
-            //  cloudinary.uploader.upload_stream({},
-            //     function (error, result) {
-            //         if (error) {
-            //             reject(error)
-            //             return
-            //         }
-            //         resolve(result)
-            //     }).end(buffer)
         })
     }
 
     const result = await uploadToCloudinary();
-    
-    //let imageUrl = result.secure_url;
-    console.log(result)
+    // console.log(result)
     return result
 
 }

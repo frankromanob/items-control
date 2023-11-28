@@ -6,7 +6,6 @@ import useSWR from 'swr'
 import { currency } from '@/utils';
 import NextLink from 'next/link';
 import { IProduct } from '@/interfaces';
-import { useState, useEffect } from 'react';
 
 
 
@@ -52,66 +51,55 @@ const columns: GridColDef[] = [
   //{ field: 'sizes', headerName: 'Tamaño', width: 200 },
 ]
 
-// const onFetchProducts = () => {
-//   const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
-//   return ({ data, error, isLoading })
-// }
-
 
 export const ProductsList = () => {
 
-    //const { data, error, isLoading } = onFetchProducts()
-    const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
-    // const [cargando, setCargando] = useState(false)
-
-    // useEffect(() => {
-    //   setCargando(isLoading)
-    // }, [isLoading])
-    
-    if (!data && !error) return <>{error}</>
+  //const { data, error, isLoading } = onFetchProducts()
+  const { data, error, isLoading } = useSWR<IProduct[]>('/api/products')
 
 
-    
-    const rows = data!.map((product) => ({
-      id: product._id,
-      img: product.images[0],
-      title: product.title,
-      type: product.type,
-      inStock: product.inStock,
-      costo: currency.format(product.costo),
-      pv: product.pv,
-      bv: currency.format(product.bv),
-      ibo: product.ibo,
-      sizes: product.sizes,
-      slug: product.slug,
-      description: product.description,
-    }))
+  if (!data && !error) return <>{error}</>
 
-    return (
-      // cargando ? <> {<Typography margin='20px' display='flex' justifyContent='center' variant='h1' color='primary'>...Cargando datos</Typography>}</>
-      // :
-      <>
-        <Grid key='productGrid' container className='fadeIn'  >
-          <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
-            <DataGrid sx={{
-              boxShadow: 2,
-              border: 1,
-              borderColor: 'teal',
-              color: 'secondary.main',
-              '& .MuiDataGrid-cell:hover': {
-                color: 'primary.main',
-              },
-            }}
-              rows={rows}
-              columns={columns}
-              autoPageSize
-            />
-          </Grid>
+
+
+  const rows = data!.map((product) => ({
+    id: product._id,
+    img: product.images[0],
+    title: product.title,
+    type: product.type,
+    inStock: product.inStock,
+    costo: currency.format(product.costo),
+    pv: product.pv,
+    bv: currency.format(product.bv),
+    ibo: product.ibo,
+    sizes: product.sizes,
+    slug: product.slug,
+    description: product.description,
+  }))
+
+  return (
+    <>
+      <Grid key='productGrid' container className='fadeIn'  >
+        <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
+          <DataGrid sx={{
+            boxShadow: 2,
+            border: 1,
+            borderColor: 'teal',
+            color: 'secondary.main',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
+            rows={rows}
+            columns={columns}
+            autoPageSize
+          />
         </Grid>
+      </Grid>
 
-      </>
-    )
-  }
+    </>
+  )
+}
 
 export default ProductsList
 

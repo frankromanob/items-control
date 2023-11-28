@@ -3,6 +3,8 @@ import { Box, Button, Typography } from '@mui/material'
 import ProductsList from '../components/ProductList'
 import { SWRConfig } from 'swr'
 import { AddOutlined } from '@mui/icons-material'
+import { Suspense } from 'react'
+import Loading from './loading'
 
 
 export default function Home() {
@@ -27,8 +29,9 @@ export default function Home() {
             Agregar Producto
           </Button>
         </Box>
-
-        <ProductsList />
+        {/* <Suspense fallback={<Loading />}> */}
+          <ProductsList />
+        {/* </Suspense> */}
 
       </Box>
     </SWRConfig>

@@ -118,7 +118,7 @@ export default function CustomersView({ customerId }: Props) {
                                 minLength: { value: 2, message: 'Mínimo 2 caracteres' }
                             })}
                             error={!!errors.firstName}
-                        //helperText={errors.firstName?.message}
+                           helperText={errors.firstName?.message}
                         />
 
                         <TextField
@@ -134,7 +134,7 @@ export default function CustomersView({ customerId }: Props) {
                                 minLength: { value: 2, message: 'Mínimo 2 caracteres' }
                             })}
                             error={!!errors.lastName}
-                        //helperText={errors.lastName?.message}
+                            helperText={errors.lastName?.message}
                         />
                         <TextField
                             label="Email"
@@ -145,12 +145,11 @@ export default function CustomersView({ customerId }: Props) {
                             name='email'
                             sx={{ mb: 1 }}
                             {...register('email', {
-                                required: 'Este campo es requerido',
-                                minLength: { value: 2, message: 'Mínimo 2 caracteres' },
+                                required: 'El correo es requerido',
                                 validate: (val) => validations.isEmail(val)
                             })}
                             error={!!errors.email}
-                        //helperText={errors.email?.message}
+                            helperText={errors.email?.message}
                         />
                         <TextField
                             label="Telefono"
@@ -162,7 +161,7 @@ export default function CustomersView({ customerId }: Props) {
                             sx={{ mb: 1 }}
                             {...register('phone')}
                             error={!!errors.phone}
-                        //helperText={errors.phone?.message}
+                            helperText={errors.phone?.message}
                         />
 
                         <Divider sx={{ my: 1 }} />
