@@ -104,10 +104,10 @@ export default function EntriesForm({ order }: Props) {
 
         const prodToSet = productList.filter((prod) => (prod._id == product))
 
-        setValue('product', prodToSet[0]._id, { shouldValidate: true })
-        setValue('productName', prodToSet[0].title, { shouldValidate: true })
-        setValue('productSlug', prodToSet[0].slug, { shouldValidate: true })
-        setValue('productImage', prodToSet[0].images[0], { shouldValidate: true })
+        // setValue('product', prodToSet[0]._id, { shouldValidate: true })
+        // setValue('productName', prodToSet[0].title, { shouldValidate: true })
+        // setValue('productSlug', prodToSet[0].slug, { shouldValidate: true })
+        // setValue('productImage', prodToSet[0].images[0], { shouldValidate: true })
 
     }
 
@@ -120,14 +120,14 @@ export default function EntriesForm({ order }: Props) {
                         <Grid item xs={10} >
                             <Grid item xs={6} sm={3} mb={2} key={getValues('product')}>
                                 <Card>
-                                    <CardMedia
+                                    {/* <CardMedia
                                         component='img'
                                         className='fadeIn'
                                         width='200'
                                         height='100%'
                                         image={`${getValues('productImage')}`}
                                         alt={getValues('productName')}
-                                    />
+                                    /> */}
                                 </Card>
                             </Grid>
                             <Box sx={{ display: 'flex', flexDirection: 'row', width: '50', height: '30', mb: 1 }}>
