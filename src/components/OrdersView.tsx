@@ -1,9 +1,7 @@
 'use client'
 import useSWR from 'swr'
-import { IOrder,IOrderItems } from '@/interfaces';
+import { IOrder } from '@/interfaces';
 import OrdersForm from './OrdersForm';
-
-
 
 
 interface Props {
@@ -20,18 +18,30 @@ export default function OrdersView({ orderId }: Props) {
         if (!data && !error) return <>{error}</>
         order = data
     } else {
-        // order = {
-        //     _id: '',
-        //     products: ',
-        //     productImage: '',
-        //     productName: '',
-        //     productSlug: '',
-        //     status: 'En proceso',
-        //     quantity: 0,
-        //     createdAt: '',
-        //     updatedAt: ''
+        order = {
+            _id: '',
+            customer: '',
+            customerName: '',
+            customerEmail: '',
+            customerPhone: '',
+            status: 'Nuevo',
+            orderItems:[
+            //     {
+            //     id:'',
+            //     product:'',
+            //     productImage:'',
+            //     productName:'',
+            //     productSlug:'',
+            //     quantity:0,
+            //     status:'En proceso',
+            //     createdAt:'',
+            //     updatedAt:''
+            // }
+        ],
+            createdAt: '',
+            updatedAt: ''
 
-        // }
+        }
     }
 
     return (

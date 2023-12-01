@@ -135,7 +135,7 @@ export default function EntriesForm({ entry }: Props) {
                                     select
                                     fullWidth
                                     id="Producto"
-                                    defaultValue=''
+                                    defaultValue={getValues('product')}
                                     label="Producto"
                                     {...register("product", {
                                         required: 'Este campo es requerido',

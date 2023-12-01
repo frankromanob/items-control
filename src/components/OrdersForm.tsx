@@ -1,28 +1,42 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { DeleteOutline, SaveOutlined } from '@mui/icons-material';
-import { Card, CardMedia, Divider, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { AddCardOutlined, DeleteOutline, RemoveCircleOutlineOutlined, RemoveFromQueueOutlined, SaveAltOutlined, SaveOutlined } from '@mui/icons-material';
+import { Card, CardMedia, Divider, Grid, Link, MenuItem, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
-import { IOrder, IProduct } from '@/interfaces';
+import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
 
 
 
 interface formData {
     _id: string;
-    product: string;
-    productName: string;
-    productSlug: string;
-    productImage: string;
-    quantity: number;
-    status: string;
+    customer: string,
+    customerName: string,
+    customerEmail: string,
+    customerPhone: string,
+    status: string,
+    orderItems: IOrderItems[]
 }
+// {
+//     _id:string;
+//     product: string;
+//     productName: string;
+//     productSlug: string;
+//     productImage: string;
+//     quantity: number;
+//     status: string;
+// }
 
 
 interface Props {
     order: IOrder
 }
+
+
+
 
 
 
@@ -32,14 +46,51 @@ export default function EntriesForm({ order }: Props) {
             defaultValues: order
         })
 
-    const [productList, setProductList] = useState<IProduct[] | undefined>
-        (undefined)
+    const [productList, setProductList] = useState<IProduct[] | undefined>(undefined)
+    const [customerList, setCustomerList] = useState<ICustomer[] | undefined>(undefined)
+    const [orderItemsList, setOrderItemsList] = useState<IOrderItems[]>(order.orderItems)
+    //order.orderItems
+    const [tempProduct, setTempProduct] = useState({ product: '', quantity: 0 })
     const [isSaving, setIsSaving] = useState(false)
     const [productsLoaded, setProductsLoaded] = useState(false)
+    const [customerLoaded, setCustomerLoaded] = useState(false)
 
     const router = useRouter()
+    const columns: GridColDef[] = [
+        // {
+        //     field: 'id', headerName: 'Id Pedido', width: 200, headerAlign: 'center',
+        //     renderCell: ({ row }) => {
+        //         return (
+        //             <NextLink href={`/admin/pedidos/${row.id}`} passHref legacyBehavior>
+        //                 <Link underline='always'>
+        //                     {row.id}
+        //                 </Link>
+        //             </NextLink>
+        //         )
+        //     }
+        // },
+        { field: 'productName', headerName: 'Producto', width: 300, },
+        { field: 'quantity', headerName: 'Cantidad', width: 80, },
+        {
+            field: 'product', headerName: 'Eliminar', width: 100, align: 'center', headerAlign: 'center',
+            renderCell: ({ row }) => {
+                return (
+                    <Button
+                        color="error"
+                        startIcon={<RemoveCircleOutlineOutlined />}
 
-    ////Product lists
+                        disabled={getValues('status') == 'Completado'}
+                        onClick={() => onRemoveItem(row)}
+                        sx={{ ml: 1, width: '20px', justifyItems: 'center' }}
+                    >
+                    </Button>
+                )
+            }
+        },
+        // { field: 'status', headerName: 'Estado', width: 100 },
+        // { field: 'date', headerName: 'Fecha', width: 200, },
+    ]
+    ////Product list
     useEffect(() => {
 
         fetch('/api/products').then(async (res) => {
@@ -57,168 +108,327 @@ export default function EntriesForm({ order }: Props) {
 
     //////
 
+    ////Customer list
+    useEffect(() => {
+
+        fetch('/api/customers').then(async (res) => {
+            const data = await res.json()
+            setCustomerList(data)
+        })
+
+    }, [])
+
+    useEffect(() => {
+        if (customerList) {
+            setCustomerLoaded(true)
+        }
+    }, [customerList])
+
+    //////
+
 
 
     const onSubmit = async (form: formData) => {
-
         setIsSaving(true)
 
         try {
-            const respuesta = await fetch('/api/entries', {
+            form.orderItems = orderItemsList
+            form.status = 'En proceso'
+            const respuesta = await fetch('/api/orders', {
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form)
             })
             setIsSaving(false)
-            alert('Entrada guardada correctamente.')
-            router.push('/entradas')
+            alert('Pedido guardado correctamente.')
+            // router.push('/pedidos')
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
             console.log(error)
         }
+    }
 
+    const onProcessOrder = async (form: formData) => {
+
+        setIsSaving(true)
+
+        try {
+            form.orderItems = orderItemsList
+            form.status = 'Completado'
+            const respuesta = await fetch('/api/orders', {
+                method: 'PUT',
+                body: JSON.stringify(form)
+            })
+            setIsSaving(false)
+            alert('Pedido guardado correctamente.')
+            router.push('/pedidos')
+        } catch (error) {
+            setIsSaving(false)
+            alert('Ha ocurrido un error. ' + error)
+            console.log(error)
+        }
     }
 
 
-    const onDelete = async (entryId: string) => {
+    const onDelete = async (orderId: string) => {
         try {
-            const respuesta = await fetch('/api/entries', {
+            const respuesta = await fetch('/api/orders', {
                 method: 'DELETE',
-                body: JSON.stringify(entryId)
+                body: JSON.stringify(orderId)
             })
 
             if (respuesta.statusText === 'OK') {
-                alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')
+                alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
             }
 
-            router.push('/entradas')
+            router.push('/pedidos')
         } catch (error) {
             setIsSaving(false)
             console.log(error)
         }
     }
 
+    const onAddItem = async () => {
+        if (tempProduct.product == '' || tempProduct.quantity < 1) {
+            alert('Debe especificar el producto y la cantidad correcta')
+            return
+        }
+        const productToSet = productList.filter((prod) => (prod._id == tempProduct.product))
+        setOrderItemsList([...orderItemsList, {
+            id: productToSet[0]._id + new Date(),
+            product: productToSet[0]._id,
+            productName: productToSet[0].title,
+            productSlug: productToSet[0].slug,
+            productImage: productToSet[0].images[0],
+            quantity: tempProduct.quantity,
+            status: 'En proceso'
+        }])
 
+        setTempProduct({ product: '', quantity: 0 })
+    }
 
-    const onSelectProduct = (product: string) => {
+    const onSelectCustomer = (customer: string) => {
 
-        const prodToSet = productList.filter((prod) => (prod._id == product))
+        const customerToSet = customerList.filter((prod) => (prod._id == customer))
 
-        // setValue('product', prodToSet[0]._id, { shouldValidate: true })
-        // setValue('productName', prodToSet[0].title, { shouldValidate: true })
-        // setValue('productSlug', prodToSet[0].slug, { shouldValidate: true })
-        // setValue('productImage', prodToSet[0].images[0], { shouldValidate: true })
+        setValue('customer', customerToSet[0]._id, { shouldValidate: true })
+        setValue('customerName', customerToSet[0].firstName + ' ' + customerToSet[0].lastName, { shouldValidate: true })
+        setValue('customerEmail', customerToSet[0].email, { shouldValidate: true })
+        setValue('customerPhone', customerToSet[0].phone, { shouldValidate: true })
 
     }
 
+    const onRemoveItem = (row) => {
+        const orderItemsFiltered = orderItemsList.filter((prod) => (prod.id != row.id))
+        setOrderItemsList(orderItemsFiltered)
+
+    }
+
+    const rows = orderItemsList.map((orderItems) => ({
+        id: orderItems.id,
+        productName: orderItems.productName,
+        product: orderItems.product,
+        productSlug: orderItems.productSlug,
+        quantity: orderItems.quantity,
+        status: orderItems.status,
+        // date: new Date(orderItems.createdAt).toLocaleDateString(),
+    }))
+
     return (
-        <>hola</>
-        // !productsLoaded ? <Typography marginInlineStart='5px' fontWeight='bold' color='secondary'>Cargando productos...</Typography>
-        //     : <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+        !productsLoaded ? <Typography marginInlineStart='5px' fontWeight='bold' color='secondary'>Cargando productos...</Typography>
+            : !customerLoaded ? <Typography marginInlineStart='5px' fontWeight='bold' color='secondary'>Cargando clientes...</Typography>
+                : <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
-        //         <form name='entryForm' onSubmit={handleSubmit(onSubmit)}>
-        //             <Grid container spacing={2} mt={1}>
-        //                 <Grid item xs={10} >
-        //                     <Grid item xs={6} sm={3} mb={2} key={getValues('product')}>
-        //                         <Card>
-        //                             {/* <CardMedia
-        //                                 component='img'
-        //                                 className='fadeIn'
-        //                                 width='200'
-        //                                 height='100%'
-        //                                 image={`${getValues('productImage')}`}
-        //                                 alt={getValues('productName')}
-        //                             /> */}
-        //                         </Card>
-        //                     </Grid>
-        //                     <Box sx={{ display: 'flex', flexDirection: 'row', width: '50', height: '30', mb: 1 }}>
-        //                         <TextField
-        //                             select
-        //                             fullWidth
-        //                             id="Producto"
-        //                             defaultValue=''
-        //                             label="Producto"
-        //                             {...register("product", {
-        //                                 required: 'Este campo es requerido',
-        //                             })}
-        //                             error={!!errors.product}
-        //                             helperText={errors.product?.message}
-        //                             onChange={(event) => onSelectProduct(event.target.value)}
-        //                         >
-        //                             {productList.map((product) => (
-        //                                 <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row' }} >
-        //                                     {/* <Card>
-        //                                         <CardMedia
-        //                                             component='img'
-        //                                             className='fadeIn'
-        //                                             width='20px'
-        //                                             height='20px'
-        //                                             image={`${product.images[0]}`}
-        //                                             alt={product.title}
-        //                                         />
-        //                                     </Card> */}
-        //                                     {product.title}
-        //                                 </MenuItem>
-        //                             ))}
-        //                         </TextField>
-        //                     </Box>
+                    <form name='entryForm' onSubmit={handleSubmit(onSubmit)} >
+                        <Grid container spacing={2} mt={1}>
+                            <Grid item xs={12} >
+                                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
+                                        <TextField
+                                            select
+                                            id="customer"
+                                            defaultValue={order.customer}
+                                            label="Cliente"
+                                            disabled={getValues('status') == 'Completado'}
+                                            {...register("customer", {
+                                                required: 'Este campo es requerido',
+                                            })}
+                                            error={!!errors.customer}
+                                            helperText={errors.customer?.message}
+                                            onChange={(event) => onSelectCustomer(event.target.value)}
+                                            sx={{ ml: 1, mb: 2 }}
+                                        >
+                                            {customerList.map((customer) => (
+                                                <MenuItem key={customer._id} value={customer._id} sx={{ display: 'flex', flexDirection: 'row' }} >
+                                                    {customer.firstName + ' ' + customer.lastName}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                        <TextField
+                                            label="Correo"
+                                            variant="outlined"
+                                            autoComplete='false'
+                                            id='email'
+                                            value={getValues('customerEmail')}
+                                            name='email'
+                                            sx={{ ml: 1, mb: 1 }}
+                                            {...register('customerEmail',)}
+                                        />
+                                    </Box>
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', mb: 1, }}>
+                                        <TextField
+                                            label="Telefono"
+                                            variant="outlined"
+                                            autoComplete='false'
+                                            id='phone'
+                                            fullWidth
+                                            value={getValues('customerPhone')}
+                                            name='phone'
+                                            sx={{ mb: 1, ml: 1 }}
+                                            {...register('customerPhone',)}
+                                        />
+                                        <TextField
+                                            label="Estado"
+                                            variant="outlined"
+                                            autoComplete='false'
+                                            id='status'
+                                            name='status'
+                                            value={getValues('status')}
+                                            sx={{ mb: 1, ml: 2 }}
+                                            {...register('status', {})}
+                                            error={!!errors.status}
+                                        />
+                                    </Box>
+                                </Box>
+
+                                <Box sx={{
+                                    display: 'flex', flexDirection: 'column',
+                                    boxShadow: 2,
+                                    border: 1,
+                                    borderRadius: 2,
+                                    borderColor: 'teal',
+                                    ml: 1
+                                }}>
+                                    <Typography sx={{ m: 1 }} color='secondary'>Agregar productos</Typography>
+                                    <Card>
+                                        {/* <CardMedia
+                                            component='img'
+                                            className='fadeIn'
+                                            width='100px'
+                                            height='200px'
+                                            image={`${getValues('orderItems.productImage')}`}
+                                            alt={getValues('orderItems.productName')}
+                                            sx={{ mb: 2 }}
+                                        /> */}
+                                    </Card>
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                                        <TextField
+                                            select
+                                            disabled={getValues('status') == 'Completado'}
+                                            id="Producto"
+                                            fullWidth
+                                            value={tempProduct.product}
+                                            name="product"
+                                            // {...register("tempProduct.product", {
+                                            //     required: 'Este campo es requerido',
+                                            // })}
+                                            // error={!!errors.orderItems.product}
+                                            // helperText={errors.orderItems.product?.message}
+                                            onChange={(event) => setTempProduct({ ...tempProduct, product: event.target.value })}
+                                            sx={{ m: 1 }}
+                                        >
+                                            {productList.map((product) => (
+                                                <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row' }} >
+                                                    {product.title}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
 
 
-        //                     <TextField
-        //                         label="Cantidad"
-        //                         variant="outlined"
-        //                         fullWidth
-        //                         type='number'
-        //                         autoComplete='false'
-        //                         id='quantity'
-        //                         name='quantity'
-        //                         sx={{ mb: 1 }}
-        //                         {...register('quantity', {
-        //                             required: 'Este campo es requerido',
-        //                             validate: (val) => val < 1 ? 'No puede ser menor a 1' : undefined
-        //                         })}
-        //                         error={!!errors.quantity}
-        //                         helperText={errors.quantity?.message}
-        //                     />
-        //                     <TextField
-        //                         label="Estado"
-        //                         variant="outlined"
-        //                         fullWidth
-        //                         autoComplete='false'
-        //                         id='status'
-        //                         name='status'
-        //                         value={getValues('status')}
-        //                         sx={{ mb: 1 }}
-        //                         {...register('status', {})}
-        //                         error={!!errors.status}
-        //                     //helperText={errors.email?.message}
-        //                     />
+                                        <TextField
+                                            label="Cantidad"
+                                            variant="outlined"
+                                            disabled={getValues('status') == 'Completado'}
+                                            type='number'
+                                            value={tempProduct.quantity}
+                                            onChange={(event) => setTempProduct({ ...tempProduct, quantity: Number(event.target.value) })}
+                                            autoComplete='false'
+                                            id='quantity'
+                                            name='quantity'
+                                            InputProps={{ inputProps: { min: 0, max: 99 } }}
+                                            sx={{ m: 1, width: '110px' }}
+                                        />
+                                    </Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            color="secondary"
+                                            startIcon={<AddCardOutlined />}
+                                            disabled={getValues('status') == 'Completado'}
+                                            sx={{ m: 1, width: '150px', height: '30px', }}
+                                            //type="submit"
+                                            // disabled={isSaving}
+                                            onClick={() => onAddItem()}
+                                        >
+                                            Agregar
+                                        </Button>
+                                    </Box>
+                                </Box>
 
-        //                     <Divider sx={{ my: 1 }} />
-        //                     <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ mb: 1 }}>
-        //                         <Button
-        //                             color="error"
-        //                             startIcon={<DeleteOutline />}
-        //                             sx={{ width: '100px', height: '30px', marginInlineEnd: '20px' }}
-        //                             type="button"
-        //                             onClick={() => onDelete(getValues('_id'))}
-        //                         >
-        //                             Eliminar
-        //                         </Button>
-        //                         <Button
-        //                             color="secondary"
-        //                             startIcon={<SaveOutlined />}
-        //                             sx={{ width: '150px', height: '30px' }}
-        //                             type="submit"
-        //                             disabled={isSaving}
-        //                         >
-        //                             Guardar
-        //                         </Button>
-        //                     </Box>
-        //                 </Grid>
-        //             </Grid>
-        //         </form>
-        //     </Box >
+                                <Divider sx={{ m: 1 }} />
+                                <Grid container className='fadeIn'  >
+                                    <Grid item lg={12} xs={12} sx={{ height: 300, width: '100%' }}>
+                                        <DataGrid sx={{
+                                            boxShadow: 2,
+                                            border: 1,
+                                            borderColor: 'teal',
+                                            color: 'secondary.main',
+                                            '& .MuiDataGrid-cell:hover': {
+                                                color: 'primary.main',
+                                            },
+                                            ml: 1
+                                        }}
+                                            rows={rows}
+                                            columns={columns}
+                                            autoPageSize
+                                        />
+                                    </Grid>
+
+                                </Grid>
+                                <Divider sx={{ m: 1 }} />
+                                <Box display='flex' flexDirection='row' justifyContent='space-between' sx={{ m: 1 }}>
+                                    <Button
+                                        color="error"
+                                        startIcon={<DeleteOutline />}
+                                        sx={{ width: '100px', height: '30px', ml: 1, mt: 1 }}
+                                        type="button"
+                                        onClick={() => onDelete(getValues('_id'))}
+                                    >
+                                        Eliminar
+                                    </Button>
+                                    <Button
+                                        color="secondary"
+                                        startIcon={<SaveOutlined />}
+                                        sx={{ width: '150px', height: '30px', m: 1 }}
+                                        type="submit"
+
+                                        disabled={isSaving || getValues('status') == 'Completado'}
+                                    >
+                                        Guardar
+                                    </Button>
+                                    <Button
+                                        color="primary"
+                                        startIcon={<SaveAltOutlined />}
+                                        sx={{ width: '150px', height: '30px', mt: 1 }}
+                                        onClick={() => onProcessOrder(order)}
+                                        disabled={isSaving || getValues('status') == 'Completado'}
+                                    >
+                                        Procesar pedido
+                                    </Button>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Box >
 
     )
 }

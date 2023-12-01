@@ -15,7 +15,6 @@ export default function Orders() {
     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
     <Box sx={{ display:'flex',  flexDirection : { xs:'column',sm:'row'},  }}   >
-          {/* <Typography sx={{ mr:3, display : { xs:'none',sm:'block'}}}  color='secondary'>Mis clientes</Typography> */}
         <Button
           size='small'
           sx={{ height: '20px', width:'200px', mb:1 }}
@@ -23,7 +22,7 @@ export default function Orders() {
           color='secondary'
           href='/admin/pedidos/nuevo'
         >
-          Dar entrada
+          Nuevo pedido
         </Button>
 
       </Box>

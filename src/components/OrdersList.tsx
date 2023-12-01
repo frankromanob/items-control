@@ -1,18 +1,18 @@
 'use client'
 
-import { CardMedia, Grid, Link } from '@mui/material'
+import { Grid, Link } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import useSWR from 'swr'
 import NextLink from 'next/link';
-import { IEntry } from '@/interfaces';
+import { IOrder } from '@/interfaces';
 
 
 const columns: GridColDef[] = [
   {
-    field: 'id', headerName: 'Id Entrada', width: 200, headerAlign: 'center',
+    field: 'id', headerName: 'Id Pedido', width: 200, headerAlign: 'center',
     renderCell: ({ row }) => {
       return (
-        <NextLink href={`/admin/entradas/${row.id}`} passHref legacyBehavior>
+        <NextLink href={`/admin/pedidos/${row.id}`} passHref legacyBehavior>
           <Link underline='always'>
             {row.id}
           </Link>
@@ -20,58 +20,25 @@ const columns: GridColDef[] = [
       )
     }
   },
-  {
-    field: 'productImage',
-    headerName: 'Foto',
-    headerAlign:'center',
-    width: 100,
-    renderCell: ({ row }) => {
-      return (
-        <CardMedia
-          component='img'
-          className='fadeIn'
-          image={`${row.productImage}`}
-          height={'50'}
-          width={'100'}
-        />
-      )
-    },
-  },
-  {
-    field: 'productName', headerName: 'Producto', width: 200, headerAlign: 'center',
-    renderCell: ({ row }) => {
-      return (
-        <NextLink href={`/admin/productos/${row.productSlug}`} passHref legacyBehavior>
-          <Link underline='always'>
-            {row.productName}
-          </Link>
-        </NextLink>
-      )
-    }
-  },
-  { field: 'quantity', headerName: 'Cantidad', width: 100 },
+  { field: 'customerName', headerName: 'Cliente', width: 200, },
   { field: 'status', headerName: 'Estado', width: 100 },
   { field: 'date', headerName: 'Fecha', width: 200, },
 ]
 
 
-
 export const OrdersList = () => {
 
-  const { data, error, isLoading } = useSWR<IEntry[]>('/api/orders')
+  const { data, error, isLoading } = useSWR<IOrder[]>('/api/orders')
 
   if (!data && !error) return <> {error}</>
 
 
-  const rows = data!.map((entry) => ({
-    id: entry._id,
-    product: entry.product,
-    quantity: entry.quantity,
-    status: entry.status,
-    date: new Date(entry.createdAt).toLocaleDateString(),
-    productName: entry.productName,
-    productImage: entry.productImage,
-    productSlug: entry.productSlug
+  const rows = data!.map((order) => ({
+    id: order._id,
+    customerName: order.customerName,
+    status: order.status,
+    date: new Date(order.createdAt).toLocaleDateString(),
+
   }))
 
   return (
