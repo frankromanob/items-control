@@ -14,8 +14,9 @@ export default function EntriesView({ entryId }: Props) {
 
     let entry: IEntry | null
 
+    const { data, error, } = useSWR<IEntry>(`/api/entries/${entryId==='nuevo'?'':entryId}`)
+
     if (entryId !== 'nuevo') {
-        const { data, error, } = useSWR<IEntry>(`/api/entries/${entryId}`)
         if (!data && !error) return <>{error}</>
         entry = data
     } else {

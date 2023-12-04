@@ -13,8 +13,9 @@ export default function OrdersView({ orderId }: Props) {
 
     let order: IOrder | null
 
+    const { data, error, } = useSWR<IOrder>(`/api/orders/${orderId==='nuevo'?'':orderId}`)
+
     if (orderId !== 'nuevo') {
-        const { data, error, } = useSWR<IOrder>(`/api/orders/${orderId}`)
         if (!data && !error) return <>{error}</>
         order = data
     } else {
