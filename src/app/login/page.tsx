@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export const LoginPage = () => {
+export default function LoginPage () {
 
     // const { loginUser, isLoggedIn } = useContext(AuthContext)
    // const router = useRouter()
@@ -170,4 +170,3 @@ export const LoginPage = () => {
 //     }
 // }
 
-export default LoginPage
