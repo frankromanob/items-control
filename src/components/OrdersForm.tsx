@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { AddCardOutlined, DeleteOutline, RemoveCircleOutlineOutlined, RemoveFromQueueOutlined, SaveAltOutlined, SaveOutlined } from '@mui/icons-material';
-import { Card, CardMedia, Divider, Grid, Link, MenuItem, TextField, Typography } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react'
+import { AddCardOutlined, DeleteOutline, RemoveCircleOutlineOutlined, SaveAltOutlined, SaveOutlined } from '@mui/icons-material';
+import { Card, CardMedia, Divider, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
@@ -50,7 +50,7 @@ export default function EntriesForm({ order }: Props) {
     const [customerList, setCustomerList] = useState<ICustomer[] | undefined>(undefined)
     const [orderItemsList, setOrderItemsList] = useState<IOrderItems[]>(order.orderItems)
     //order.orderItems
-    const [tempProduct, setTempProduct] = useState({ product: '', quantity: 0 })
+    const [tempProduct, setTempProduct] = useState({ product: '', title: '', quantity: 0 })
     const [isSaving, setIsSaving] = useState(false)
     const [productsLoaded, setProductsLoaded] = useState(false)
     const [customerLoaded, setCustomerLoaded] = useState(false)
@@ -160,7 +160,7 @@ export default function EntriesForm({ order }: Props) {
                 body: JSON.stringify(form)
             })
             setIsSaving(false)
-            alert('Pedido guardado correctamente.')
+            alert('Pedido procesado correctamente.')
             router.push('/pedidos')
         } catch (error) {
             setIsSaving(false)
@@ -176,7 +176,7 @@ export default function EntriesForm({ order }: Props) {
                 method: 'DELETE',
                 body: JSON.stringify(orderId)
             })
-
+            //console.log(respuesta)
             if (respuesta.statusText === 'OK') {
                 alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
             }
@@ -204,7 +204,13 @@ export default function EntriesForm({ order }: Props) {
             status: 'En proceso'
         }])
 
-        setTempProduct({ product: '', quantity: 0 })
+        setTempProduct({ product: '', title: '', quantity: 0 })
+    }
+
+    const onChangeTempProduct = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+        const productToSet = productList.filter((prod) => (prod._id == e.target.value))
+        setTempProduct({ ...tempProduct, product: productToSet[0]._id, title: productToSet[0].title })
     }
 
     const onSelectCustomer = (customer: string) => {
@@ -254,7 +260,7 @@ export default function EntriesForm({ order }: Props) {
                                                 required: 'Este campo es requerido',
                                             })}
                                             error={!!errors.customer}
-                                            helperText={errors.customer?.message}
+                                            helperText="Seleccione el cliente de este pedido"
                                             onChange={(event) => onSelectCustomer(event.target.value)}
                                             sx={{ ml: 1, mb: 2 }}
                                         >
@@ -329,17 +335,26 @@ export default function EntriesForm({ order }: Props) {
                                             fullWidth
                                             value={tempProduct.product}
                                             name="product"
-                                            // {...register("tempProduct.product", {
-                                            //     required: 'Este campo es requerido',
-                                            // })}
-                                            // error={!!errors.orderItems.product}
-                                            // helperText={errors.orderItems.product?.message}
-                                            onChange={(event) => setTempProduct({ ...tempProduct, product: event.target.value })}
+                                            SelectProps={{
+                                                renderValue: (product: IProduct) => tempProduct.title
+                                            }}
+                                            helperText="Seleccione el producto a agregar"
+                                            onChange={(event) => onChangeTempProduct(event)}
                                             sx={{ m: 1 }}
                                         >
                                             {productList.map((product) => (
-                                                <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row' }} >
-                                                    {product.title}
+                                                <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row', flex: 'wrap' }} >
+                                                    <Box sx={{width:'20px' ,mr:1 }}>
+                                                        <CardMedia
+                                                            component='img'
+                                                            //width='10px'
+                                                            //height='20px'
+                                                            image={product.images[0]}
+                                                            alt={product.title}
+
+                                                        />
+                                                    </Box>
+                                                        {product.title} - {product.inStock}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
@@ -420,7 +435,7 @@ export default function EntriesForm({ order }: Props) {
                                         startIcon={<SaveAltOutlined />}
                                         sx={{ width: '150px', height: '30px', mt: 1 }}
                                         onClick={() => onProcessOrder(order)}
-                                        disabled={isSaving || getValues('status') == 'Completado'}
+                                        disabled={isSaving || getValues('status') !== 'En proceso'}
                                     >
                                         Procesar pedido
                                     </Button>

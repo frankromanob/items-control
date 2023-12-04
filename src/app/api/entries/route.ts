@@ -1,6 +1,5 @@
-import { db } from '@/database'
+import { db, dbProducts } from '@/database'
 import Entries from '@/models/Entries'
-import Products from '@/models/Products'
 import { isValidObjectId } from 'mongoose'
 
 
@@ -19,12 +18,6 @@ export async function POST(request: Request) {
 
 
     await db.connect()
-    // const customer = await Entries.findOne({ email })
-    // if (customer) {
-    //     await db.disconnect()
-    //     console.log('El correo ya existe')
-    //     return new Response('El correo ya existe', { status: 400 })
-    // }
 
     const newEntry = new Entries({
         product,
@@ -32,20 +25,12 @@ export async function POST(request: Request) {
         productSlug,
         productImage,
         quantity,
-        status:'En proceso',
+        status: 'En proceso',
     })
 
     try {
+        dbProducts.increaseProductQuantity(product, Number(quantity))
         await newEntry.save({ validateBeforeSave: true })
-
-        const productToUpdate = await Products.findById({ _id: product })
-        if (productToUpdate) {
-            productToUpdate.inStock += Number(quantity)
-            await productToUpdate.save({ validateBeforeSave: true })
-            newEntry.status='Completada'
-            await newEntry.save({ validateBeforeSave: true })
-        }
-
 
     } catch (error) {
         console.log(error)
@@ -74,7 +59,7 @@ export async function PUT(request: Request) {
         return new Response('El registro de entrada no existe', { status: 400 })
     }
 
-    if (entry.status=='Completada'){return}
+    if (entry.status == 'Completada') { return }
 
     entry.product = product
     entry.quantity = Number(quantity)
@@ -86,14 +71,9 @@ export async function PUT(request: Request) {
 
 
     try {
+        dbProducts.increaseProductQuantity(product, Number(quantity))
         await entry.save({ validateBeforeSave: true })
-        const productToUpdate = await Products.findById({ _id: product })
-        if (productToUpdate) {
-            productToUpdate.inStock += Number(quantity)
-            await productToUpdate.save({ validateBeforeSave: true })
-            entry.status='Completada'
-            await entry.save({ validateBeforeSave: true })
-        }
+
 
     } catch (error) {
         console.log(error)

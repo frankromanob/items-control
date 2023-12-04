@@ -1,15 +1,13 @@
-import { db } from '@/database'
-import { IOrder, IOrderItems } from '@/interfaces'
-import Customers from '@/models/Customers'
-import Orders from '@/models/Orders'
-import Products from '@/models/Products'
+import { db, dbProducts } from '@/database'
+import { IOrder } from '@/interfaces'
+import Order from '@/models/Orders'
 import { isValidObjectId } from 'mongoose'
 
 
 
 export async function GET() {
     await db.connect()
-    const orders = await Orders.find().sort({ title: 'asc' }).lean()
+    const orders = await Order.find().sort({ title: 'asc' }).lean()
     await db.disconnect()
 
     return Response.json(orders)
@@ -27,17 +25,11 @@ export async function POST(request: Request) {
         orderItems = {}
     } = formData
 
-    // console.log(formData)
 
     await db.connect()
-    // const customer = await Customers.findOne({ email })
-    // if (customer) {
-    //     await db.disconnect()
-    //     console.log('El correo ya existe')
-    //     return new Response('El correo ya existe', { status: 400 })
-    // }
 
-    const newOrder = new Orders({
+
+    const newOrder = new Order({
         customer,
         customerName,
         customerEmail,
@@ -59,8 +51,8 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-    const formData:IOrder = await request.json()
-    console.log(formData)
+    const formData: IOrder = await request.json()
+    //console.log(formData)
     const {
         _id = '',
         customer = '',
@@ -77,7 +69,7 @@ export async function PUT(request: Request) {
     }
 
     await db.connect()
-    const order = await Orders.findById({ _id })
+    const order = await Order.findById({ _id })
     if (!order) {
         await db.disconnect()
         console.log('El pedido no existe')
@@ -87,30 +79,21 @@ export async function PUT(request: Request) {
     if (status == 'Completado') {
 
         try {
-            orderItems.map(async (item:IOrderItems,key) => {
-                const productToUpdate = await Products.findById({ _id: item.product })
-                if (productToUpdate) {
-                    productToUpdate.inStock -= Number(item.quantity)
-                    order.orderItems[key].status = 'Completado'
-                }
-                await productToUpdate.save({ validateBeforeSave: true })
-            })
+            dbProducts.decreaseProductQuantity(orderItems)
 
         } catch (error) {
             console.log(error)
-            return new Response('Error al enviar al servidor', { status: 500 })
+            return new Response('Error al rebajar inventario', { status: 500 })
         }
-
-    } else {
-        order.customer = customer
-        order.customerName = customerName
-        order.customerPhone = customerPhone
-        order.customerEmail = customerEmail
-        order.status=status
-        order.orderItems = orderItems
 
     }
 
+    order.customer = customer
+    order.customerName = customerName
+    order.customerPhone = customerPhone
+    order.customerEmail = customerEmail
+    order.status = status
+    order.orderItems = orderItems
 
 
     try {
@@ -127,29 +110,30 @@ export async function PUT(request: Request) {
 
 
 export async function DELETE(request: Request) {
-    const customerId = await request.json()
 
-    if (!isValidObjectId(customerId)) {
+    const orderId = await request.json()
+
+    if (!isValidObjectId(orderId)) {
         console.log('Id incorrecto')
-        return new Response('Id de cliente incorrecto', { status: 400 })
+        return new Response('Id de pedido incorrecto', { status: 400 })
     }
 
     await db.connect()
-    const customer = await Customers.findById({ _id: customerId })
-    if (!customer) {
+    const order = await Order.findById({ _id: orderId })
+    if (!order) {
         await db.disconnect()
-        console.log('El cliente no existe')
-        return new Response('El cliente no existe', { status: 400 })
+        console.log('El pedido no existe')
+        return new Response('El pedido no existe', { status: 400 })
     }
 
     try {
-        await customer.deleteOne({ validateBeforeSave: true })
+        await order.deleteOne({ validateBeforeSave: true })
     } catch (error) {
         console.log(error)
         return new Response('Error al enviar al servidor', { status: 500 })
     }
 
     await db.disconnect()
-    return Response.json(customer)
+    return Response.json(order)
 
 }

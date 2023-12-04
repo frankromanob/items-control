@@ -25,7 +25,7 @@ export const SideBar = () => {
             </Typography>
             <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
             <List sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' } }}  >
-                <ListItemButton onClick={() => onHandleclick('/')} >
+                <ListItemButton onClick={() => onHandleclick('/productos')} >
                     <ListItemIcon> <CategoryIcon /> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis productos</Typography>} />
                 </ListItemButton>

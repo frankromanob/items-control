@@ -12,10 +12,10 @@ interface Props {
 
 export default function EntriesView({ entryId }: Props) {
 
-    const { data, error, } = useSWR<IEntry>(`/api/entries/${entryId}`)
     let entry: IEntry | null
 
     if (entryId !== 'nuevo') {
+        const { data, error, } = useSWR<IEntry>(`/api/entries/${entryId}`)
         if (!data && !error) return <>{error}</>
         entry = data
     } else {

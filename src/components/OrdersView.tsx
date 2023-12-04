@@ -11,10 +11,10 @@ interface Props {
 
 export default function OrdersView({ orderId }: Props) {
 
-    const { data, error, } = useSWR<IOrder>(`/api/orders/${orderId}`)
     let order: IOrder | null
 
     if (orderId !== 'nuevo') {
+        const { data, error, } = useSWR<IOrder>(`/api/orders/${orderId}`)
         if (!data && !error) return <>{error}</>
         order = data
     } else {
@@ -25,19 +25,19 @@ export default function OrdersView({ orderId }: Props) {
             customerEmail: '',
             customerPhone: '',
             status: 'Nuevo',
-            orderItems:[
-            //     {
-            //     id:'',
-            //     product:'',
-            //     productImage:'',
-            //     productName:'',
-            //     productSlug:'',
-            //     quantity:0,
-            //     status:'En proceso',
-            //     createdAt:'',
-            //     updatedAt:''
-            // }
-        ],
+            orderItems: [
+                //     {
+                //     id:'',
+                //     product:'',
+                //     productImage:'',
+                //     productName:'',
+                //     productSlug:'',
+                //     quantity:0,
+                //     status:'En proceso',
+                //     createdAt:'',
+                //     updatedAt:''
+                // }
+            ],
             createdAt: '',
             updatedAt: ''
 

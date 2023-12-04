@@ -104,7 +104,7 @@ export default function EntriesForm({ entry }: Props) {
 
         const prodToSet = productList.filter((prod) => (prod._id == product))
 
-        setValue('product', prodToSet[0]._id, { shouldValidate: true })
+        // setValue('product', prodToSet[0]._id, { shouldValidate: true })
         setValue('productName', prodToSet[0].title, { shouldValidate: true })
         setValue('productSlug', prodToSet[0].slug, { shouldValidate: true })
         setValue('productImage', prodToSet[0].images[0], { shouldValidate: true })
@@ -119,7 +119,7 @@ export default function EntriesForm({ entry }: Props) {
                     <Grid container spacing={2} mt={1}>
                         <Grid item xs={10} >
                             <Grid item xs={6} sm={3} mb={2} key={getValues('product')}>
-                                <Card>
+                                <Card sx={{width:'110px'}}>
                                     <CardMedia
                                         component='img'
                                         className='fadeIn'
@@ -135,8 +135,11 @@ export default function EntriesForm({ entry }: Props) {
                                     select
                                     fullWidth
                                     id="Producto"
-                                    defaultValue={getValues('product')}
+                                    defaultValue={entry.product}
                                     label="Producto"
+                                    // SelectProps={{
+                                    //     renderValue: (product:IProduct) => entry.product
+                                    // }}
                                     {...register("product", {
                                         required: 'Este campo es requerido',
                                     })}
@@ -146,16 +149,16 @@ export default function EntriesForm({ entry }: Props) {
                                 >
                                     {productList.map((product) => (
                                         <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row' }} >
-                                            {/* <Card>
+                                            <Box sx={{ width: '20px', mr: 1 }}>
                                                 <CardMedia
                                                     component='img'
-                                                    className='fadeIn'
-                                                    width='20px'
-                                                    height='20px'
-                                                    image={`${product.images[0]}`}
+                                                    //width='10px'
+                                                    //height='20px'
+                                                    image={product.images[0]}
                                                     alt={product.title}
+
                                                 />
-                                            </Card> */}
+                                            </Box>
                                             {product.title}
                                         </MenuItem>
                                     ))}
