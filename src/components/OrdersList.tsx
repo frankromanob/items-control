@@ -9,7 +9,7 @@ import { IOrder } from '@/interfaces';
 
 const columns: GridColDef[] = [
   {
-    field: 'id', headerName: 'Id Pedido', width: 200, headerAlign: 'center',
+    field: 'id', headerName: 'Id Pedido', width: 100, headerAlign: 'center',
     renderCell: ({ row }) => {
       return (
         <NextLink href={`/admin/pedidos/${row.id}`} passHref legacyBehavior>
@@ -44,7 +44,7 @@ export const OrdersList = () => {
   return (
     <>
       <Grid container className='fadeIn' >
-        <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
+        <Grid item lg={12} xs={12} sx={{ height: 650, width: '100%' }}>
           <DataGrid sx={{
             boxShadow: 2,
             border: 1,

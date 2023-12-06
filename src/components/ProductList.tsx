@@ -12,8 +12,8 @@ import { IProduct } from '@/interfaces';
 const columns: GridColDef[] = [
   {
     field: 'img',
-    headerName: 'Foto',
-    width: 100,
+    headerName: 'Imagen',
+    width: 90,
     renderCell: ({ row }) => {
       return (
         <a href={`/products/${row.slug}`} target='_blank' style={{ margin: '5px' }}>
@@ -80,7 +80,7 @@ export const ProductsList = () => {
   return (
     <>
       <Grid key='productGrid' container className='fadeIn'  >
-        <Grid item lg={12} xs={8} sx={{ height: 650, width: '100%' }}>
+        <Grid item lg={12} xs={12} sx={{ height: 620, width: '100%' }}>
           <DataGrid sx={{
             boxShadow: 2,
             border: 1,

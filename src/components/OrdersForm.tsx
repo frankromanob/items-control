@@ -423,7 +423,7 @@ export default function EntriesForm({ order }: Props) {
                                     <Button
                                         color="secondary"
                                         startIcon={<SaveOutlined />}
-                                        sx={{ width: '150px', height: '30px', m: 1 }}
+                                        sx={{ width: '100px', height: '30px', m: 1 }}
                                         type="submit"
 
                                         disabled={isSaving || getValues('status') == 'Completado'}
@@ -433,11 +433,11 @@ export default function EntriesForm({ order }: Props) {
                                     <Button
                                         color="primary"
                                         startIcon={<SaveAltOutlined />}
-                                        sx={{ width: '150px', height: '30px', mt: 1 }}
+                                        sx={{ width: '160px', height: '30px', mt: 1 }}
                                         onClick={() => onProcessOrder(order)}
                                         disabled={isSaving || getValues('status') !== 'En proceso'}
                                     >
-                                        Procesar pedido
+                                    Procesar pedido
                                     </Button>
                                 </Box>
                             </Grid>

@@ -37,9 +37,9 @@ export default function CustomersView({ customerId }: Props) {
         useForm<ICustomer>({
             defaultValues: {}
         })
-    const { data, error, isLoading } = useSWR<ICustomer>(`/api/customers/${customerId}`)    
+    const { data, error, isLoading } = useSWR<ICustomer>(`/api/customers/${customerId === 'nuevo' ? '' : customerId}`)
     if (customerId !== 'nuevo') {
-    //    const { data, error } = onFetchCustomer(customerId)
+        //    const { data, error } = onFetchCustomer(customerId)
         if (!data && !error) return <>{error}</>
 
         if (!data) {
@@ -56,7 +56,7 @@ export default function CustomersView({ customerId }: Props) {
         }
     }
 
-   
+
 
     const onSubmit = async (form: formData) => {
 
@@ -104,7 +104,7 @@ export default function CustomersView({ customerId }: Props) {
 
             <form name='customerForm' onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2} mt={1}>
-                    <Grid item xs={10}>
+                    <Grid item xs={12}>
                         <TextField
                             label="Nombre"
                             variant='outlined'
@@ -118,7 +118,7 @@ export default function CustomersView({ customerId }: Props) {
                                 minLength: { value: 2, message: 'Mínimo 2 caracteres' }
                             })}
                             error={!!errors.firstName}
-                           helperText={errors.firstName?.message}
+                            helperText={errors.firstName?.message}
                         />
 
                         <TextField

@@ -1,9 +1,10 @@
 'use client'
+import  Dashboard from '@/components/Dashboard'
 import { Box, Typography } from '@mui/material'
 import { SWRConfig } from 'swr'
 
 
-export default function ProductsPage() {
+export default function HomePage() {
   return (
     <SWRConfig
       value={{
@@ -11,12 +12,10 @@ export default function ProductsPage() {
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
       }}
     >
-
-
-        <Box sx={{ ml:1, border:1, borderColor:'teal', 
-        width:'95%',height:'100%', display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems:'center',alignContent:'center' }}   >
-          <Typography sx={{ ml:1,  display : 'flex'}} color='secondary'>Bienvenido</Typography>
-
+        <Box sx={{ m:1, border:0, borderColor:'teal', 
+        width:'95%',height:'100%', display: 'flex', flexDirection: 'column', alignItems:'center',alignContent:'center' }}   >
+          <Typography sx={{ m:1,  display : 'flex'}} variant='h2' color='primary'>Dashboard</Typography>
+        <Dashboard/>
         </Box>
 
 

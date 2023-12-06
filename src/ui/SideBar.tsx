@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import GroupIcon from '@mui/icons-material/Group';
 import SouthIcon from '@mui/icons-material/South';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 export const SideBar = () => {
 
@@ -25,6 +26,10 @@ export const SideBar = () => {
             </Typography>
             <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
             <List sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' } }}  >
+                <ListItemButton onClick={() => onHandleclick('/')} >
+                    <ListItemIcon> <HomeOutlinedIcon /> </ListItemIcon>
+                    <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Inicio</Typography>} />
+                </ListItemButton>
                 <ListItemButton onClick={() => onHandleclick('/productos')} >
                     <ListItemIcon> <CategoryIcon /> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis productos</Typography>} />

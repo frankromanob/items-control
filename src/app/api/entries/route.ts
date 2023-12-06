@@ -30,6 +30,7 @@ export async function POST(request: Request) {
 
     try {
         dbProducts.increaseProductQuantity(product, Number(quantity))
+        newEntry.status='Completada'
         await newEntry.save({ validateBeforeSave: true })
 
     } catch (error) {
@@ -63,7 +64,7 @@ export async function PUT(request: Request) {
 
     entry.product = product
     entry.quantity = Number(quantity)
-    entry.status = status
+    entry.status = 'Completada'
     entry.productImage = productImage
     entry.productName = productName
     entry.productSlug = productSlug

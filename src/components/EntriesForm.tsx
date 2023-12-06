@@ -117,9 +117,9 @@ export default function EntriesForm({ entry }: Props) {
 
                 <form name='entryForm' onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2} mt={1}>
-                        <Grid item xs={10} >
+                        <Grid item xs={12} >
                             <Grid item xs={6} sm={3} mb={2} key={getValues('product')}>
-                                <Card sx={{width:'110px'}}>
+                                <Card sx={{ width: '110px' }}>
                                     <CardMedia
                                         component='img'
                                         className='fadeIn'
@@ -135,6 +135,7 @@ export default function EntriesForm({ entry }: Props) {
                                     select
                                     fullWidth
                                     id="Producto"
+                                    disabled={getValues('status') == 'Completada'}
                                     defaultValue={entry.product}
                                     label="Producto"
                                     // SelectProps={{
@@ -171,6 +172,7 @@ export default function EntriesForm({ entry }: Props) {
                                 variant="outlined"
                                 fullWidth
                                 type='number'
+                                disabled={getValues('status') == 'Completada'}
                                 autoComplete='false'
                                 id='quantity'
                                 name='quantity'
@@ -212,7 +214,7 @@ export default function EntriesForm({ entry }: Props) {
                                     startIcon={<SaveOutlined />}
                                     sx={{ width: '150px', height: '30px' }}
                                     type="submit"
-                                    disabled={isSaving}
+                                    disabled={isSaving || getValues('status') == 'Completada'}
                                 >
                                     Guardar
                                 </Button>
