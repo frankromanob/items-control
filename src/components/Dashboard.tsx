@@ -1,6 +1,6 @@
 'use client'
 import { SummaryTile } from '@/ui/SummaryTile'
-import { AccessTimeOutlined, AttachMoneyOutlined, CancelPresentationOutlined, CategoryOutlined, CreditCardOffOutlined, CreditCardOutlined, GroupOutlined, ProductionQuantityLimitsOutlined } from '@mui/icons-material'
+import { AccessTimeOutlined, AttachMoneyOutlined, CancelPresentationOutlined, CancelPresentationRounded, CategoryOutlined, CategoryRounded, ContactsRounded, CreditCardOffOutlined, CreditCardOutlined, FactCheckRounded, GroupOutlined, PendingActionsRounded, ProductionQuantityLimitsOutlined, ProductionQuantityLimitsRounded, ReceiptLongRounded } from '@mui/icons-material'
 import { Grid, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -19,10 +19,10 @@ export const DashboardPage = () => {
         productosWithoutInventory: number 
         lowInventory: number 
     }
-    const { data, error } = useSWR<DashboardDataResponse>('api/dashboard')
-    // const { data, error } = useSWR<DashboardDataResponse>('api/dashboard', {
-    //     refreshInterval: 30 * 1000
-    // })
+    // const { data, error } = useSWR<DashboardDataResponse>('api/dashboard')
+    const { data, error } = useSWR<DashboardDataResponse>('api/dashboard', {
+        refreshInterval: 90 * 1000
+    })
 
     // const [refreshIn, setRefreshIn] = useState(30)
 
@@ -59,13 +59,13 @@ export const DashboardPage = () => {
     return (
 
             <Grid container spacing={2}>
-                <SummaryTile title={totalOrders} subTitle={'Total de pedidos'} icon={<ReceiptLongOutlinedIcon color='secondary' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={completedOrders} subTitle={'Pedidos completados'} icon={<FactCheckOutlinedIcon color='success' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={pendingOrders} subTitle={'Pedidos pendientes'} icon={<PendingActionsOutlinedIcon color='error' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={totalClients} subTitle={'Clientes'} icon={<GroupOutlined color='primary' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={totalProducts} subTitle={'Productos'} icon={<CategoryOutlined color='warning' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={productosWithoutInventory} subTitle={'Sin existencia'} icon={<CancelPresentationOutlined color='error' sx={{ fontSize: 40 }} />} />
-                <SummaryTile title={lowInventory} subTitle={'Bajo inventario'} icon={<ProductionQuantityLimitsOutlined color='warning' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={totalOrders} subTitle={'Total de pedidos'} icon={<ReceiptLongRounded color='secondary' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={completedOrders} subTitle={'Pedidos completados'} icon={<FactCheckRounded color='success' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={pendingOrders} subTitle={'Pedidos pendientes'} icon={<PendingActionsRounded color='error' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={totalClients} subTitle={'Clientes'} icon={<ContactsRounded color='primary' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={totalProducts} subTitle={'Productos'} icon={<CategoryRounded color='warning' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={productosWithoutInventory} subTitle={'Sin existencia'} icon={<CancelPresentationRounded color='error' sx={{ fontSize: 40 }} />} />
+                <SummaryTile title={lowInventory} subTitle={'Bajo inventario'} icon={<ProductionQuantityLimitsRounded color='warning' sx={{ fontSize: 40 }} />} />
                 {/* <SummaryTile title={refreshIn} subTitle={'Actualización en:'} icon={<AccessTimeOutlined color='secondary' sx={{ fontSize: 40 }} />} /> */}
             </Grid>
 

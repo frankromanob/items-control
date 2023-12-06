@@ -17,7 +17,7 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
     <ThemeProvider theme={mainTheme}>
       <html lang='en' >
         <body >
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             {/* <Box sx={{width: { sm: '190px' }}}>
               <SideBar />
             </Box> */}
@@ -25,7 +25,6 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
             <Box >
               {children}
             </Box>
-
           </Box>
           <section style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <FooterPage />

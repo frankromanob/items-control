@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Link } from "@mui/material"
+import { Box, Grid, Link } from "@mui/material"
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -17,7 +17,7 @@ export const FooterPage = () => {
     return (
         < >
 
-            <Box sx={{ width: '190px', mt: 2 }}  >
+            <Box sx={{ width: '190px', mt: 2,marginInlineStart:1 }}  >
                 <Grid container display='flex' flexDirection='row'  >
                     {redes.map(({ name, link, icon }) => (
                         <Grid item key={link} margin='5px'>

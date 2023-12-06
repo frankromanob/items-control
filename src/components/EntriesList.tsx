@@ -81,7 +81,7 @@ export const EntriesList = () => {
           <DataGrid sx={{
             boxShadow: 2,
             border: 1,
-            borderColor: 'teal',
+            borderColor: '#F5F256',
             color: 'secondary.main',
             '& .MuiDataGrid-cell:hover': {
               color: 'primary.main',

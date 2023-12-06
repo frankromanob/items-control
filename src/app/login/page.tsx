@@ -3,18 +3,16 @@ import { GetServerSideProps } from 'next'
 import { validations } from '@/utils';
 import { ErrorOutline } from '@mui/icons-material';
 import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material'
-import { getSession, signIn, useSession, getProviders } from 'next-auth/react';
 import NextLink from "next/link";
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import myApi from '../lib/myApi';
+import  { useCookies } from 'react-cookie'
 
 export default function LoginPage () {
+    const [cookies, setCookie, removeCookie] = useCookies(['items-control-token']);
 
-    // const { loginUser, isLoggedIn } = useContext(AuthContext)
-   // const router = useRouter()
-
-    // const sessions = useSession()
 
     type FormData = {
         email: string
@@ -23,13 +21,6 @@ export default function LoginPage () {
 
     const [showError, setShowError] = useState(false)
 
-    const [providers, setProviders] = useState<any>({})
-
-    useEffect(() => {
-        getProviders().then(prov => {
-            setProviders(prov)
-        })
-    }, [])
 
 
     const {
@@ -42,27 +33,18 @@ export default function LoginPage () {
     const onLogin = async ({ email, password }: FormData) => {
         setShowError(false)
 
-        // const isValidLogin = await loginUser(email, password)
+        try {
 
-        // if (!isValidLogin) {
-        //     setShowError(true)
-        //     setTimeout(() => setShowError(false), 2000)
-        //     return
-        // }
-        // const destination = router.query.p?.toString() || '/';
-        // router.replace(destination)
-        // try {
+            const { data } = await myApi.post('/user/login', { email, password })
+            console.log(data.token, '-', data.user)
+            setCookie('items-control-token',data.token)
+        } catch (error) {
+            console.log('error de clave')
+            setShowError(true)
+            setTimeout(() => setShowError(false), 2000)
+        }
 
-        //     const { data } = await tesloApi.post('/user/login', { email, password })
-        //     console.log(data.token, '-', data.user)
-        //     Cookies.set('token', data.token)
-        // } catch (error) {
-        //     console.log('error de clave')
-        //     setShowError(true)
-        //     setTimeout(() => setShowError(false), 2000)
-        // }
-
-        await signIn('credentials', { email, password })
+        //await signIn('credentials', { email, password })
     }
 
     return (

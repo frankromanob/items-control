@@ -9,15 +9,22 @@ export const mainTheme = createTheme({
       main: '#6fabd0'
     },
     secondary: {
-        main: '#477977'
+      main: '#477977'
     },
-    info:{
-        main: '#6fabd0'
+    info: {
+      main: '#6fabd0'
     },
-    error:{
-        main: '#E77577'
+    success: {
+      main: '#97C1A9'
+    },
+    error: {
+      main: '#E77577'
+    },
+    background: {
+      default: '#F0F3F3',
     },
   },
+
   components: {
     MuiLink: {
       defaultProps: {
