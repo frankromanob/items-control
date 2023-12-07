@@ -18,19 +18,19 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
       <CssBaseline/>
       <html lang='en'>
         <body >
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' },mt:1 }}>
-            <Box sx={{width: { sm: '190px' }}}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' },mt:1,justifyContent:{xs:'center',lg:'flex-start'}  }}>
+            <Box sx={{width: { sm: '190px' },display:'flex',justifyContent:{xs:'center'} }}>
               <SideBar />
             </Box>
 
-            <Box >
+            <Box sx={{ display:'flex', justifyContent:{xs:'center'}}} >
               {children}
             </Box>
 
           </Box>
-          <section style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Box sx={{ display: 'flex', justifyContent: {xs:'center',lg:'flex-start'}, }}>
             <FooterPage />
-          </section>
+          </Box>
         </body>
       </html>
     </ThemeProvider>

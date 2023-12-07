@@ -2,6 +2,7 @@
 import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { useRouter } from "next/navigation";
 import { AddRounded, AddShoppingCartRounded, CategoryRounded, ContactsRounded, HomeRounded, LogoutRounded, StarHalfRounded } from '@mui/icons-material';
+import { logOut } from '../app/lib/user';
 
 export const SideBar = () => {
 
@@ -11,7 +12,8 @@ export const SideBar = () => {
     }
 
     const logOff = () => {
-        console.log('sesion cerrada')
+        logOut()
+        router.push('/login')
     }
 
     return (
@@ -20,29 +22,29 @@ export const SideBar = () => {
                 Menu principal
             </Typography>
             <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
-            <List sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' } }}  >
-                <ListItemButton onClick={() => onHandleclick('/')} >
+            <List sx={{ display: 'flex', flexDirection: { xs: 'row', sm: 'column' },  }}  >
+                <ListItemButton  onClick={() => onHandleclick('/')} >
                     <ListItemIcon> <HomeRounded color='secondary' /> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Inicio</Typography>} />
                 </ListItemButton>
-                <ListItemButton onClick={() => onHandleclick('/productos')} >
+                <ListItemButton  onClick={() => onHandleclick('/productos')} >
                     <ListItemIcon> <CategoryRounded color='secondary'/> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis productos</Typography>} />
                 </ListItemButton>
-                <ListItemButton onClick={() => onHandleclick('/clientes')} >
+                <ListItemButton   onClick={() => onHandleclick('/clientes')} >
                     <ListItemIcon> <ContactsRounded color='secondary'/> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Mis clientes</Typography>} />
                 </ListItemButton>
-                <ListItemButton onClick={() => onHandleclick('/pedidos')} >
+                <ListItemButton  onClick={() => onHandleclick('/pedidos')} >
                     <ListItemIcon> <AddShoppingCartRounded color='secondary' /> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Pedidos</Typography>} />
                 </ListItemButton>
-                <ListItemButton onClick={() => onHandleclick('/entradas')} >
+                <ListItemButton  onClick={() => onHandleclick('/entradas')} >
                     <ListItemIcon> <AddRounded color='secondary'/> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Entradas</Typography>} />
                 </ListItemButton>
                 <Divider sx={{ display: { xs: 'none', sm: 'block' } }} />
-                <ListItemButton onClick={logOff}>
+                <ListItemButton   onClick={logOff}>
                     <ListItemIcon> <StarHalfRounded color='secondary'/> </ListItemIcon>
                     <ListItemText sx={{ display: { xs: 'none', sm: 'block' } }} primary={<Typography color='primary'>Cerrar sesión</Typography>} />
                 </ListItemButton>

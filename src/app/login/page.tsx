@@ -1,18 +1,16 @@
 'use client'
-import { GetServerSideProps } from 'next'
 import { validations } from '@/utils';
 import { ErrorOutline } from '@mui/icons-material';
-import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material'
-import NextLink from "next/link";
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material'
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import myApi from '../lib/myApi';
-import  { useCookies } from 'react-cookie'
+import Cookies from 'js-cookie';
+import { isLogin } from '../lib/user';
 
 export default function LoginPage () {
-    const [cookies, setCookie, removeCookie] = useCookies(['items-control-token']);
-
+    const router=useRouter()
 
     type FormData = {
         email: string
@@ -34,26 +32,23 @@ export default function LoginPage () {
         setShowError(false)
 
         try {
-
-            const { data } = await myApi.post('/user/login', { email, password })
-            console.log(data.token, '-', data.user)
-            setCookie('items-control-token',data.token)
+            const { data } = await myApi.post('/users', { email, password })
+            Cookies.set('items-control-token',data.token)
+            Cookies.set('items-control-user',data.user.name)
+            router.replace('/')
         } catch (error) {
             console.log('error de clave')
             setShowError(true)
             setTimeout(() => setShowError(false), 2000)
         }
-
-        //await signIn('credentials', { email, password })
     }
 
     return (
-   //     <AuthLayout title={'Ingresar'}>
             <form onSubmit={handleSubmit(onLogin)} noValidate>
                 <Box sx={{ width: 350, padding: '10px 20px' }} >
                     <Grid container spacing={2} display='flex' justifySelf='center'>
-                        <Grid item xs={12}>
-                            <Typography variant='h1' component='h1'>Iniciar sesión</Typography>
+                        <Grid item xs={12} display='flex' justifyContent='center'>
+                            <Typography variant='h2' color='secondary' component='h2'>Iniciar sesión</Typography>
                             {showError && <Chip
                                 label="Usuario/Clave desconocido"
                                 color='warning'
@@ -63,7 +58,7 @@ export default function LoginPage () {
                             }
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField type='email' label='Correo' variant='filled' fullWidth
+                            <TextField type='email' label='Correo' variant='filled' fullWidth autoComplete='true'
                                 {...register('email', {
                                     required: 'El correo es requerido',
                                     validate: (val) => validations.isEmail(val)
@@ -74,7 +69,7 @@ export default function LoginPage () {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label='Contraseña' variant='filled' type='password' fullWidth
+                            <TextField label='Contraseña' variant='filled' type='password' fullWidth autoComplete='true'
                                 {...register('password', {
                                     required: 'Debe especificar una contraseña',
                                     minLength: { value: 6, message: 'Minimo de 6 caracteres' }
@@ -124,31 +119,7 @@ export default function LoginPage () {
                     </Grid>
                 </Box>
             </form>
-   //     </AuthLayout>
+
     )
 }
-
-// You should use getServerSideProps when:
-// - Only if you need to pre-render a page whose data must be fetched at request time
-
-
-// export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
-
-
-//     const session = await getSession({ req })
-//     const { p = '/' } = query
-//     if (session) {
-//         return {
-//             redirect: {
-//                 destination: p.toString(),
-//                 permanent: false
-//             }
-//         }
-//     }
-
-//     return {
-//         props: {
-//         }
-//     }
-// }
 

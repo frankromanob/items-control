@@ -1,5 +1,5 @@
 export * from './myApi'
 
-export * from './useProducts'
-
 export * as jwt from './jwt'
+
+export * as user from './user'
