@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import FooterPage from '@/ui/Footer'
-import { SideBar } from '@/ui/SideBar'
 import { Box, ThemeProvider } from '@mui/material';
 import { mainTheme } from '@/ui/theme'
 
@@ -14,23 +13,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider theme={mainTheme}>
-      <html lang='en' >
-        <body >
+    <html lang='en' >
+      <body >
+        <ThemeProvider theme={mainTheme}>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            {/* <Box sx={{width: { sm: '190px' }}}>
-              <SideBar />
-            </Box> */}
-
             <Box >
               {children}
             </Box>
           </Box>
-          <section style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <section style={{ display: 'flex', justifyContent: 'center' }}>
             <FooterPage />
           </section>
-        </body>
-      </html>
-    </ThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }

@@ -146,10 +146,10 @@ export default function ProductForm({ producto }: Props) {
 
     return (
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', m:1 }}>
 
             <form name='productForm' onSubmit={handleSubmit(onSubmit)}>
-                <Grid container spacing={2} mt={1}>
+                <Grid container spacing={2} mb={1}>
                     <Grid item xs={12} sm={6} >
                         <Box display='flex' flexDirection="column">
                             <FormLabel sx={{ mb: 1 }}>Imágenes: </FormLabel>

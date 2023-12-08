@@ -139,8 +139,10 @@ export default function EntriesForm({ order }: Props) {
                 body: JSON.stringify(form)
             })
             setIsSaving(false)
+            const respJson= await respuesta.json()
+            //console.log(respJson._id)
             alert('Pedido guardado correctamente.')
-            // router.push('/pedidos')
+            router.push(`/admin/pedidos/${respJson._id}`)
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)

@@ -15,20 +15,20 @@ export const metadata: Metadata = {
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
   return (
     <ThemeProvider theme={mainTheme}>
-      <CssBaseline/>
+      <CssBaseline />
       <html lang='en'>
         <body >
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' },mt:1,justifyContent:{xs:'center',lg:'flex-start'}  }}>
-            <Box sx={{width: { sm: '190px' },display:'flex',justifyContent:{xs:'center'} }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+            <Box sx={{ width: { sm: '190px' }, display: 'flex', justifyContent: { xs: 'center' } }}>
               <SideBar />
             </Box>
 
-            <Box sx={{ display:'flex', justifyContent:{xs:'center'}}} >
+            <Box sx={{ display: 'flex' }} >
               {children}
             </Box>
 
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: {xs:'center',lg:'flex-start'}, }}>
+          <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' }, }}>
             <FooterPage />
           </Box>
         </body>

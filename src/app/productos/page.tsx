@@ -27,9 +27,8 @@ export default function ProductsPage() {
             Agregar Producto
           </Button>
         </Box>
-        {/* <Suspense fallback={<Loading />}> */}
-          <ProductsList />
-        {/* </Suspense> */}
+
+        <ProductsList />
 
       </Box>
     </SWRConfig>

@@ -100,7 +100,7 @@ export default function CustomersView({ customerId }: Props) {
 
     return (
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', m:1 }}>
 
             <form name='customerForm' onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2} mt={1}>

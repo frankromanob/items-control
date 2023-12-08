@@ -113,7 +113,7 @@ export default function EntriesForm({ entry }: Props) {
 
     return (
         !productsLoaded ? <Typography marginInlineStart='5px' fontWeight='bold' color='secondary'>Cargando productos...</Typography>
-            : <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+            : <Box sx={{ display: 'flex', flexDirection: 'column',m:1 }}>
 
                 <form name='entryForm' onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2} mt={1}>
