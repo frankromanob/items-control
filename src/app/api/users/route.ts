@@ -9,7 +9,6 @@ export async function POST(request: Request) {
     const formData = await request.json()
     const { email = '', password = '' } = formData
     const token = await loginUser(email, password)
-   // console.log(email,password,token)
     return Response.json(token)
 }
 
@@ -30,7 +29,7 @@ const loginUser = async (email: string, password: string) => {
     const { _id, role, name } = user;
 
     const token = await jwt.signToken(_id, email)
-    //console.log(token)
+
     return (
         {
             token,

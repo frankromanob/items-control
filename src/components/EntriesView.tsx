@@ -1,7 +1,7 @@
-'use client'
-import useSWR from 'swr'
+
 import { IEntry } from '@/interfaces';
 import EntriesForm from './EntriesForm';
+import myApi from '@/app/lib/myApi';
 
 
 
@@ -10,14 +10,14 @@ interface Props {
 }
 
 
-export default function EntriesView({ entryId }: Props) {
+export default async function EntriesView({ entryId }: Props) {
 
     let entry: IEntry | null
 
-    const { data, error, } = useSWR<IEntry>(`/api/entries/${entryId==='nuevo'?'':entryId}`)
+    const { data, statusText, } = await myApi<IEntry>(`/entries/${entryId==='nuevo'?'':entryId}`)
 
     if (entryId !== 'nuevo') {
-        if (!data && !error) return <>{error}</>
+        if (!data && statusText!=='OK') return <>{statusText}</>
         entry = data
     } else {
         entry = {

@@ -12,27 +12,29 @@ export const metadata: Metadata = {
   authors: [{ name: "Francisco Romano", url: "https://github.com/frankromanob" }]
 }
 
-export default function RootLayout({ children, }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider theme={mainTheme}>
-      <CssBaseline />
-      <html lang='en'>
+    <html lang='en'>
+      <ThemeProvider theme={mainTheme}>
+        <CssBaseline />
         <body >
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-            <Box sx={{ width: { sm: '190px' }, display: 'flex', justifyContent: { xs: 'center' } }}>
-              <SideBar />
+          <div>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+              <Box sx={{ width: { sm: '190px' }, display: 'flex', justifyContent: { xs: 'center' } }}>
+                <SideBar />
+              </Box>
+
+              <div style={{ display: 'flex' }} >
+                {children}
+              </div>
             </Box>
 
-            <Box sx={{ display: 'flex' }} >
-              {children}
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' }, }}>
+              <FooterPage />
             </Box>
-
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' }, }}>
-            <FooterPage />
-          </Box>
+          </div>
         </body>
-      </html>
-    </ThemeProvider>
+      </ThemeProvider>
+    </html>
   )
 }

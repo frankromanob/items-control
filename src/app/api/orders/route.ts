@@ -104,7 +104,7 @@ export async function PUT(request: Request) {
     }
 
     await db.disconnect()
-    return Response.json(customer)
+    return Response.json(order)
 
 }
 

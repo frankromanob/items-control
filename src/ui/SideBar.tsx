@@ -1,7 +1,7 @@
 'use client'
 import { Box, Divider, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { useRouter } from "next/navigation";
-import { AddRounded, AddShoppingCartRounded, CategoryRounded, ContactsRounded, HomeRounded, LogoutRounded, StarHalfRounded } from '@mui/icons-material';
+import { AddRounded, AddShoppingCartRounded, CategoryRounded, ContactsRounded, HomeRounded, StarHalfRounded } from '@mui/icons-material';
 import { logOut } from '../app/lib/user';
 
 export const SideBar = () => {

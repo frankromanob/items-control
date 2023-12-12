@@ -7,6 +7,7 @@ import { Box, Button } from '@mui/material'
 import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import myApi from '@/app/lib/myApi';
 
 
 
@@ -20,23 +21,11 @@ interface formData {
     status: string,
     orderItems: IOrderItems[]
 }
-// {
-//     _id:string;
-//     product: string;
-//     productName: string;
-//     productSlug: string;
-//     productImage: string;
-//     quantity: number;
-//     status: string;
-// }
 
 
 interface Props {
     order: IOrder
 }
-
-
-
 
 
 
@@ -49,7 +38,7 @@ export default function EntriesForm({ order }: Props) {
     const [productList, setProductList] = useState<IProduct[] | undefined>(undefined)
     const [customerList, setCustomerList] = useState<ICustomer[] | undefined>(undefined)
     const [orderItemsList, setOrderItemsList] = useState<IOrderItems[]>(order.orderItems)
-    //order.orderItems
+
     const [tempProduct, setTempProduct] = useState({ product: '', title: '', quantity: 0 })
     const [isSaving, setIsSaving] = useState(false)
     const [productsLoaded, setProductsLoaded] = useState(false)
@@ -57,18 +46,6 @@ export default function EntriesForm({ order }: Props) {
 
     const router = useRouter()
     const columns: GridColDef[] = [
-        // {
-        //     field: 'id', headerName: 'Id Pedido', width: 200, headerAlign: 'center',
-        //     renderCell: ({ row }) => {
-        //         return (
-        //             <NextLink href={`/admin/pedidos/${row.id}`} passHref legacyBehavior>
-        //                 <Link underline='always'>
-        //                     {row.id}
-        //                 </Link>
-        //             </NextLink>
-        //         )
-        //     }
-        // },
         { field: 'productName', headerName: 'Producto', width: 300, },
         { field: 'quantity', headerName: 'Cantidad', width: 80, },
         {
@@ -87,16 +64,18 @@ export default function EntriesForm({ order }: Props) {
                 )
             }
         },
-        // { field: 'status', headerName: 'Estado', width: 100 },
-        // { field: 'date', headerName: 'Fecha', width: 200, },
+
     ]
     ////Product list
     useEffect(() => {
 
-        fetch('/api/products').then(async (res) => {
-            const data = await res.json()
+
+
+        const buscaProds = async () => {
+            const { data } = await myApi('/products')
             setProductList(data)
-        })
+        }
+        buscaProds()
 
     }, [])
 
@@ -111,10 +90,13 @@ export default function EntriesForm({ order }: Props) {
     ////Customer list
     useEffect(() => {
 
-        fetch('/api/customers').then(async (res) => {
-            const data = await res.json()
+
+
+        const buscaCustomers = async () => {
+            const { data } = await myApi('/customers')
             setCustomerList(data)
-        })
+        }
+        buscaCustomers()
 
     }, [])
 
@@ -134,15 +116,16 @@ export default function EntriesForm({ order }: Props) {
         try {
             form.orderItems = orderItemsList
             form.status = 'En proceso'
-            const respuesta = await fetch('/api/orders', {
+            const respuesta = await myApi('/orders', {
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                data: JSON.stringify(form)
             })
             setIsSaving(false)
-            const respJson= await respuesta.json()
-            //console.log(respJson._id)
+            //console.log(respuesta)
+            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             alert('Pedido guardado correctamente.')
-            router.push(`/admin/pedidos/${respJson._id}`)
+            //router.replace('/pedidos')
+            router.replace(`/admin/pedidos/${respuesta.data._id}`)
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
@@ -157,13 +140,15 @@ export default function EntriesForm({ order }: Props) {
         try {
             form.orderItems = orderItemsList
             form.status = 'Completado'
-            const respuesta = await fetch('/api/orders', {
+            const respuesta = await myApi('/orders', {
                 method: 'PUT',
-                body: JSON.stringify(form)
+                data: JSON.stringify(form)
             })
             setIsSaving(false)
+            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             alert('Pedido procesado correctamente.')
-            router.push('/pedidos')
+            router.replace('/pedidos')
+            router.refresh()
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
@@ -174,16 +159,18 @@ export default function EntriesForm({ order }: Props) {
 
     const onDelete = async (orderId: string) => {
         try {
-            const respuesta = await fetch('/api/orders', {
+            const respuesta = await myApi('/orders', {
                 method: 'DELETE',
-                body: JSON.stringify(orderId)
+                data: JSON.stringify(orderId)
             })
             //console.log(respuesta)
-            if (respuesta.statusText === 'OK') {
-                alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
+            if (respuesta.statusText !== 'OK') {
+                if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
 
-            router.push('/pedidos')
+            alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
+            router.replace('/pedidos')
+            router.refresh()
         } catch (error) {
             setIsSaving(false)
             console.log(error)
@@ -346,7 +333,7 @@ export default function EntriesForm({ order }: Props) {
                                         >
                                             {productList.map((product) => (
                                                 <MenuItem key={product._id} value={product._id} sx={{ display: 'flex', flexDirection: 'row', flex: 'wrap' }} >
-                                                    <Box sx={{width:'20px' ,mr:1 }}>
+                                                    <Box sx={{ width: '20px', mr: 1 }}>
                                                         <CardMedia
                                                             component='img'
                                                             //width='10px'
@@ -356,7 +343,7 @@ export default function EntriesForm({ order }: Props) {
 
                                                         />
                                                     </Box>
-                                                        {product.title} - {product.inStock}
+                                                    {product.title} - {product.inStock}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
@@ -439,7 +426,7 @@ export default function EntriesForm({ order }: Props) {
                                         onClick={() => onProcessOrder(order)}
                                         disabled={isSaving || getValues('status') !== 'En proceso'}
                                     >
-                                    Procesar pedido
+                                        Procesar pedido
                                     </Button>
                                 </Box>
                             </Grid>

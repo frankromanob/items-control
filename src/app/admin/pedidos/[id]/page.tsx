@@ -1,28 +1,22 @@
-'use client'
+
 import { Box, Typography } from '@mui/material'
-import { SWRConfig } from 'swr'
 import OrdersView from '@/components/OrdersView';
 
 
 export default function OrdersAdmin({ params }: { params: { id: string } }) {
 
   return (
-    <SWRConfig
-      value={{
-        //refreshInterval: 3000,
-        fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
-        <Box display='flex' marginInlineStart='5px' justifyContent='space-between'  >
-          <Typography color='secondary'>Pedido: {params.id}</Typography>
-        </Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
-        <OrdersView orderId={params.id} />
+      <Box display='flex' marginInlineStart='5px' justifyContent='space-between'  >
+        <Typography color='secondary'>Pedido: {params.id}</Typography>
+      </Box>
 
-      </Box >
-    </SWRConfig >
+      <OrdersView orderId={params.id} />
+
+    </Box >
+
   )
 }
 

@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IEntry, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
+import myApi from '@/app/lib/myApi';
 
 
 
@@ -42,10 +43,12 @@ export default function EntriesForm({ entry }: Props) {
     ////Product lists
     useEffect(() => {
 
-        fetch('/api/products').then(async (res) => {
-            const data = await res.json()
+
+        const buscaProds = async () => {
+            const { data } = await myApi('/products')
             setProductList(data)
-        })
+        }
+        buscaProds()
 
     }, [])
 
@@ -62,15 +65,24 @@ export default function EntriesForm({ entry }: Props) {
     const onSubmit = async (form: formData) => {
 
         setIsSaving(true)
-
         try {
-            const respuesta = await fetch('/api/entries', {
+
+            console.log(form)
+            const respuesta = await myApi({
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                url: '/entries',
+                data: JSON.stringify(form),
+                headers: {
+                    'Content-Type': `multipart/form-data; `
+                }
             })
+
             setIsSaving(false)
+
+            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             alert('Entrada guardada correctamente.')
-            router.push('/entradas')
+            router.replace('/entradas')
+            router.refresh()
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
@@ -82,16 +94,18 @@ export default function EntriesForm({ entry }: Props) {
 
     const onDelete = async (entryId: string) => {
         try {
-            const respuesta = await fetch('/api/entries', {
+            const respuesta = await myApi('/entries', {
                 method: 'DELETE',
-                body: JSON.stringify(entryId)
+                data: JSON.stringify(entryId)
             })
 
-            if (respuesta.statusText === 'OK') {
-                alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')
+            if (respuesta.statusText !== 'OK') {
+                { throw new Error(respuesta.statusText) }
             }
+            alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')
 
-            router.push('/entradas')
+            router.replace('/entradas')
+            router.refresh()
         } catch (error) {
             setIsSaving(false)
             console.log(error)
@@ -113,7 +127,7 @@ export default function EntriesForm({ entry }: Props) {
 
     return (
         !productsLoaded ? <Typography marginInlineStart='5px' fontWeight='bold' color='secondary'>Cargando productos...</Typography>
-            : <Box sx={{ display: 'flex', flexDirection: 'column',m:1 }}>
+            : <Box sx={{ display: 'flex', flexDirection: 'column', m: 1 }}>
 
                 <form name='entryForm' onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2} mt={1}>

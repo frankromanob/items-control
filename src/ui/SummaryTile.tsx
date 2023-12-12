@@ -13,7 +13,6 @@ export const SummaryTile = ({ title, subTitle, icon }: Props) => {
 
                 <CardContent sx={{ width: 50, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     {icon}
-                    {/* <CreditCardOffOutlined color='secondary' sx={{ fontSize: 40 }} /> */}
                 </CardContent>
                 <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
                     <Typography variant='h3'>{title}</Typography>

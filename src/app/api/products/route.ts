@@ -1,13 +1,8 @@
 import { db } from '@/database'
-import { IProduct } from '@/interfaces'
 import Products from '@/models/Products'
 import { isValidObjectId } from 'mongoose'
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { v2 as cloudinary } from 'cloudinary'
 
-type Data =
-    | { message: string }
-    | IProduct[]
 
 export async function GET() {
     await db.connect()
@@ -25,7 +20,6 @@ export async function GET() {
     })
 
     return Response.json(updatedProducts)
-    // return Response.json({ message: 'Example' })
 }
 
 
@@ -47,7 +41,7 @@ export async function POST(request: Request) {
         type = ''
     } = formData
 
-    //console.log(formData)
+
 
     await db.connect()
     const product = await Products.findOne({ slug })
@@ -81,23 +75,7 @@ export async function POST(request: Request) {
 
     await db.disconnect()
     return Response.json(newProduct)
-    //return Response.json({message:'hola POST'})
 
-    // if (!validations.isValidEmail(email)) {
-    //     return res.status(400).json({ message: 'Correo con formato inválido' })
-    // }
-
-    // const { _id, role } = newUser;
-
-    // const token = jwt.signToken(_id, email)
-
-    // return res.status(200).json({
-    //     token,
-    //     user: {
-    //         email, role, name
-    //     }
-    // })
-    // return Response.json({ message: 'Example' })
 }
 
 export async function PUT(request: Request) {
@@ -201,7 +179,6 @@ export async function DELETE(request: Request) {
         //delete image
         images.forEach(async (image) => {
 
-            console.log('borrar img')
             const [fileId, Extension] = image.substring(image.lastIndexOf('/') + 1).split('.')
             console.log(fileId)
             await cloudinary.uploader.destroy(fileId);

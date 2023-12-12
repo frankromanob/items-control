@@ -1,21 +1,19 @@
-'use client'
-import useSWR from 'swr'
+
 import { IProduct } from '@/interfaces';
 import ProductForm from "@/components/ProductForm";
-
-
+import myApi from '@/app/lib/myApi';
 
 
 interface Props {
     slug: string
 }
 
-export default function ProductView({ slug }: Props) {
-    const { data, error, isLoading } = useSWR<IProduct>(`/api/products/${slug}`)
+export default async function ProductView({ slug }: Props) {
+    const { data, statusText } = await myApi<IProduct>(`/products/${slug === 'nuevo' ? '' : slug}`)
+
     let product: IProduct | null
     if (slug !== 'nuevo') {
-       // const { data, error } = onFetchProduct(slug)
-        if (!data && !error) return <>{error}</>
+        if (!data && statusText!=='OK') return <>{statusText}</>
         product = data
     } else {
         product = {

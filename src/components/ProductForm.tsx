@@ -1,7 +1,7 @@
 'use client'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { DeleteOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material';
-import { Card, CardActions, CardMedia, Chip, Divider, FormLabel, Grid, TextField, capitalize } from '@mui/material';
+import { Card, CardActions, CardMedia, Chip, Divider, FormLabel, Grid, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IProduct } from '@/interfaces';
@@ -107,14 +107,14 @@ export default function ProductForm({ producto }: Props) {
 
 
         try {
-            const respuesta = await fetch('/api/products', {
+            const respuesta = await myApi('/products', {
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                data: JSON.stringify(form)
             })
-            router.refresh()
-            alert('Cambios guardados correctamente')
-
             setIsSaving(false)
+            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
+            alert('Producto guardado correctamente.')
+            router.replace('/productos')
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
@@ -126,15 +126,17 @@ export default function ProductForm({ producto }: Props) {
 
     const onDelete = async (productId: string, images: string[]) => {
         try {
-            const respuesta = await fetch('/api/products', {
+            const respuesta = await myApi('/products', {
                 method: 'DELETE',
-                body: JSON.stringify(productId, images)
+                data: JSON.stringify({productId, images})
             })
 
-            if (respuesta.statusText === 'OK') {
-                router.push('/')
-                alert('Producto eliminado correctamente')
+            if (respuesta.statusText !== 'OK') {
+                if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
+            alert('Producto eliminado correctamente')
+            router.replace('/productos')
+            router.refresh()
 
         } catch (error) {
             setIsSaving(false)
