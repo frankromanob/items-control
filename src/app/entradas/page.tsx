@@ -2,9 +2,11 @@
 import EntriesList from '@/components/EntriesList'
 import { AddOutlined } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
+import { revalidatePath } from 'next/cache'
 
 
 export default function Entries() {
+  revalidatePath('/entradas')
   return (
 
     <Box sx={{ display: 'flex', flexDirection: 'column', }}>

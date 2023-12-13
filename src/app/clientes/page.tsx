@@ -2,8 +2,10 @@
 import CustomerList from '@/components/CustomerList'
 import { AddOutlined } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
+import { revalidatePath } from 'next/cache'
 
 export default function Customers() {
+  revalidatePath('/clientes')
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 

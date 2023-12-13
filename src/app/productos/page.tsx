@@ -2,9 +2,11 @@
 import { Box, Button } from '@mui/material'
 import ProductsList from '@/components/ProductList'
 import { AddOutlined } from '@mui/icons-material'
+import { revalidatePath } from 'next/cache'
 
 
 export default function ProductsPage() {
+  revalidatePath('/productos')
   return (
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
