@@ -5,7 +5,6 @@ import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import myApi from '../lib/myApi';
 import Cookies from 'js-cookie';
 
 
@@ -28,11 +27,16 @@ export default function LoginPage() {
     } = useForm<FormData>()
 
 
-    const onLogin = async ({ email, password }: FormData) => {
+    const onLogin = async (loginData: FormData) => {
         setShowError(false)
 
         try {
-            const { data } = await myApi.post('/users', { email, password })
+            const resp = await fetch('/api/users',
+                {
+                    body: JSON.stringify(loginData),
+                    method: 'POST'
+                })
+            const data = await resp.json()
             Cookies.set('items-control-token', data.token)
             Cookies.set('items-control-user', data.user.name)
             router.replace('/')

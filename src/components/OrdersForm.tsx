@@ -7,7 +7,7 @@ import { Box, Button } from '@mui/material'
 import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import myApi from '@/app/lib/myApi';
+
 
 
 
@@ -72,7 +72,8 @@ export default function EntriesForm({ order }: Props) {
 
 
         const buscaProds = async () => {
-            const { data } = await myApi('/products')
+            const resp = await fetch('/api/products')
+            const data= await resp.json()
             setProductList(data)
         }
         buscaProds()
@@ -93,7 +94,8 @@ export default function EntriesForm({ order }: Props) {
 
 
         const buscaCustomers = async () => {
-            const { data } = await myApi('/customers')
+            const resp = await fetch('/api/customers')
+            const data=await resp.json()
             setCustomerList(data)
         }
         buscaCustomers()
@@ -116,16 +118,16 @@ export default function EntriesForm({ order }: Props) {
         try {
             form.orderItems = orderItemsList
             form.status = 'En proceso'
-            const respuesta = await myApi('/orders', {
+            const respuesta = await fetch('/api/orders', {
                 method: form._id ? 'PUT' : 'POST',
-                data: JSON.stringify(form)
+                body: JSON.stringify(form)
             })
             setIsSaving(false)
             //console.log(respuesta)
             if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             alert('Pedido guardado correctamente.')
-            //router.replace('/pedidos')
-            router.replace(`/admin/pedidos/${respuesta.data._id}`)
+            const data=await respuesta.json()
+            router.replace(`/admin/pedidos/${data._id}`)
         } catch (error) {
             setIsSaving(false)
             alert('Ha ocurrido un error. ' + error)
@@ -140,9 +142,9 @@ export default function EntriesForm({ order }: Props) {
         try {
             form.orderItems = orderItemsList
             form.status = 'Completado'
-            const respuesta = await myApi('/orders', {
+            const respuesta = await fetch('/api/orders', {
                 method: 'PUT',
-                data: JSON.stringify(form)
+                body: JSON.stringify(form)
             })
             setIsSaving(false)
             if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
@@ -159,9 +161,9 @@ export default function EntriesForm({ order }: Props) {
 
     const onDelete = async (orderId: string) => {
         try {
-            const respuesta = await myApi('/orders', {
+            const respuesta = await fetch('/api/orders', {
                 method: 'DELETE',
-                data: JSON.stringify(orderId)
+                body: JSON.stringify(orderId)
             })
             //console.log(respuesta)
             if (respuesta.statusText !== 'OK') {

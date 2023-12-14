@@ -1,8 +1,7 @@
 
-import myApi from '@/app/lib/myApi'
 import { SummaryTile } from '@/ui/SummaryTile'
 import { CancelPresentationRounded, CategoryRounded, ContactsRounded, FactCheckRounded, PendingActionsRounded, ProductionQuantityLimitsRounded, ReceiptLongRounded } from '@mui/icons-material'
-import { Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 
 
 
@@ -18,15 +17,15 @@ export const DashboardPage = async () => {
         lowInventory: number
     }
 
-    const { data, statusText } = await myApi.get('/dashboard')
+    const resp = await fetch(process.env.HOST_NAME + '/api/dashboard', { cache: 'no-store' })
 
 
-    if (!data) {
-        return <></>
+    if (!resp.ok) {
+        throw new Error('Error al cargar datos del Dashboard')
     }
-    if (statusText !== 'OK') {
-        return <><Typography>Error al cargar información</Typography></>
-    }
+
+    const data = await resp.json()
+
 
     const {
         totalOrders,

@@ -40,7 +40,7 @@ const uploadFile = async (request: Request) => {
     }
 
     const result = await uploadToCloudinary();
-    // console.log(result)
+     //console.log(result)
     return result
 
 }

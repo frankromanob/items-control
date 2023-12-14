@@ -1,17 +1,16 @@
 
-import { IEntry } from '@/interfaces';
-import myApi from '@/app/lib/myApi';
 import EntriesListGrid from './EntriesListGrid';
 
 
 
 export const EntriesList = async() => {
 
-  const { data, statusText,  } = await myApi<IEntry[]>('/entries')
+  const resp = await fetch(process.env.HOST_NAME + '/api/entries',{cache:'no-store'})
 
-  if (!data && statusText!=='OK') return <> {statusText}</>
-
-
+  if (!resp.ok) {
+    throw new Error('Error al cargar datos de entradas')
+  }
+  const data = await resp.json()
 
   return (
     <EntriesListGrid entries={data}/>

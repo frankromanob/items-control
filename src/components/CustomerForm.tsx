@@ -7,7 +7,7 @@ import { Box, Button } from '@mui/material'
 import { ICustomer } from '@/interfaces';
 import { validations } from '@/utils';
 import { useRouter } from 'next/navigation';
-import myApi from '@/app/lib/myApi';
+
 
 
 interface formData {
@@ -39,9 +39,9 @@ export default function CustomersForm({ customer }: Props) {
 
 
         try {
-            const respuesta = await myApi('/customers', {
+            const respuesta = await fetch('/api/customers', {
                 method: form._id ? 'PUT' : 'POST',
-                data: JSON.stringify(form)
+                body: JSON.stringify(form)
             })
             setIsSaving(false)
             if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
@@ -59,13 +59,13 @@ export default function CustomersForm({ customer }: Props) {
 
     const onDelete = async (customerId: string) => {
         try {
-            const respuesta = await myApi('/customers', {
+            const respuesta = await fetch('/api/customers', {
                 method: 'DELETE',
-                data: JSON.stringify(customerId)
+                body: JSON.stringify(customerId)
             })
 
             if (respuesta.statusText !== 'OK') {
-                if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }   
+                if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
             alert('Cliente eliminado correctamente')
 

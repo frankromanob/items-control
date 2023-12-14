@@ -1,19 +1,20 @@
 
-import { IOrder } from '@/interfaces';
-import myApi from '@/app/lib/myApi';
 import { OrdersListGrid } from './OrdersListGrid';
 
 
 
 export const OrdersList = async () => {
 
-  const { data, statusText,  } = await myApi<IOrder[]>('/orders')
+  const resp = await fetch(process.env.HOST_NAME + '/api/orders', { cache: 'no-store' })
 
-  if (!data && statusText!=='OK') return <> {statusText}</>
+  if (!resp.ok) {
+    throw new Error('Error al cargar datos de pedidos')
+  }
+  const data = await resp.json()
 
 
   return (
-    <OrdersListGrid orders={data}/>
+    <OrdersListGrid orders={data} />
   )
 }
 

@@ -1,6 +1,4 @@
 
-import { IProduct } from '@/interfaces';
-import myApi from '@/app/lib/myApi';
 import { ProductListGrid } from './ProductListGrid';
 
 
@@ -8,10 +6,14 @@ import { ProductListGrid } from './ProductListGrid';
 export const ProductsList = async () => {
 
 
-  const { data, statusText } = await myApi<IProduct[]>('/products')
+  const resp = await fetch(process.env.HOST_NAME + '/api/products', { cache: 'no-store' })
 
 
-  if (!data && statusText !== 'OK') return <>{statusText}</>
+  if (!resp.ok) {
+    throw new Error('Error al cargar datos de productos')
+  }
+
+  const data = await resp.json()
 
   return (
     <>

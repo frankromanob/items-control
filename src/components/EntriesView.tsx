@@ -1,7 +1,7 @@
 
 import { IEntry } from '@/interfaces';
 import EntriesForm from './EntriesForm';
-import myApi from '@/app/lib/myApi';
+
 
 
 
@@ -14,11 +14,14 @@ export default async function EntriesView({ entryId }: Props) {
 
     let entry: IEntry | null
 
-    const { data, statusText, } = await myApi<IEntry>(`/entries/${entryId==='nuevo'?'':entryId}`)
+    const resp = await fetch(`${process.env.HOST_NAME}/api/entries/${entryId === 'nuevo' ? '' : entryId}`, { cache: 'no-store' })
+    if (!resp.ok) {
+        throw new Error('Error al cargar datos de entradas')
+    }
 
     if (entryId !== 'nuevo') {
-        if (!data && statusText!=='OK') return <>{statusText}</>
-        entry = data
+
+        entry = await resp.json()
     } else {
         entry = {
             _id: '',

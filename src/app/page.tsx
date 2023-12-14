@@ -2,9 +2,11 @@
 import Dashboard from '@/components/Dashboard'
 import { Box, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
+import { revalidatePath } from 'next/cache'
 
 
 export default function HomePage() {
+  revalidatePath('/')
   const userName = Cookies.get('items-control-user')
   return (
     <Box sx={{

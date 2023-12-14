@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IEntry, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
-import myApi from '@/app/lib/myApi';
 
 
 
@@ -45,7 +44,8 @@ export default function EntriesForm({ entry }: Props) {
 
 
         const buscaProds = async () => {
-            const { data } = await myApi('/products')
+            const resp = await fetch('/api/products')
+            const data= await resp.json()
             setProductList(data)
         }
         buscaProds()
@@ -68,10 +68,9 @@ export default function EntriesForm({ entry }: Props) {
         try {
 
             console.log(form)
-            const respuesta = await myApi({
+            const respuesta = await fetch('/api/entries',{
                 method: form._id ? 'PUT' : 'POST',
-                url: '/entries',
-                data: JSON.stringify(form),
+                body: JSON.stringify(form),
                 headers: {
                     'Content-Type': `multipart/form-data; `
                 }
@@ -94,9 +93,9 @@ export default function EntriesForm({ entry }: Props) {
 
     const onDelete = async (entryId: string) => {
         try {
-            const respuesta = await myApi('/entries', {
+            const respuesta = await fetch('/api/entries', {
                 method: 'DELETE',
-                data: JSON.stringify(entryId)
+                body: JSON.stringify(entryId)
             })
 
             if (respuesta.statusText !== 'OK') {

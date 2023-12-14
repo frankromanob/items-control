@@ -1,23 +1,23 @@
 
 
 import React, { } from 'react'
-import { ICustomer } from '@/interfaces';
 import { CustomerListGrid } from './CustomerListGrid';
-import myApi from '@/app/lib/myApi';
 
 
 
 export const CustomersList = async () => {
 
 
-    const { data, statusText, } = await myApi<ICustomer[]>('/customers')
+  const resp = await fetch(process.env.HOST_NAME + '/api/customers', { cache: 'no-store' })
 
-    if (!data && statusText !== 'OK') return <> {statusText}</>
-
-    return (
-      <CustomerListGrid customers={data}/>
-    )
+  if (!resp.ok) {
+    throw new Error('Error al cargar datos de clientes')
   }
+  const data = await resp.json()
+  return (
+    <CustomerListGrid customers={data} />
+  )
+}
 
 export default CustomersList
 

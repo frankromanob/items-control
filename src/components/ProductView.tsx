@@ -1,7 +1,6 @@
 
 import { IProduct } from '@/interfaces';
 import ProductForm from "@/components/ProductForm";
-import myApi from '@/app/lib/myApi';
 
 
 interface Props {
@@ -9,12 +8,15 @@ interface Props {
 }
 
 export default async function ProductView({ slug }: Props) {
-    const { data, statusText } = await myApi<IProduct>(`/products/${slug === 'nuevo' ? '' : slug}`)
+    const resp = await fetch(`${process.env.HOST_NAME}/api/products/${slug === 'nuevo' ? '' : slug}`,{ cache: 'no-store' })
+
+    if (!resp.ok) {
+        throw new Error('Error al cargar datos de productos')
+    }
 
     let product: IProduct | null
     if (slug !== 'nuevo') {
-        if (!data && statusText!=='OK') return <>{statusText}</>
-        product = data
+        product = await resp.json()
     } else {
         product = {
             _id: '',

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
-import myApi from '@/app/lib/myApi';
+
 
 
 interface formData {
@@ -72,9 +72,16 @@ export default function ProductForm({ producto }: Props) {
 
         try {
             for (const file of target.files) {
-                const formData = new FormData
+                const formData = new FormData()
                 formData.append('file', file)
-                const { data } = await myApi.post<{ secure_url: string }>('/uploads', formData)
+                const resp = await fetch('/api/uploads',
+                    {
+                        method: 'POST',
+                        body: formData,
+                    })
+
+                const data = await resp.json()
+
                 setValue('images', [...getValues('images'), data.secure_url], { shouldValidate: true })
 
             }
@@ -107,9 +114,9 @@ export default function ProductForm({ producto }: Props) {
 
 
         try {
-            const respuesta = await myApi('/products', {
+            const respuesta = await fetch('/api/products', {
                 method: form._id ? 'PUT' : 'POST',
-                data: JSON.stringify(form)
+                body: JSON.stringify(form)
             })
             setIsSaving(false)
             if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
@@ -126,9 +133,9 @@ export default function ProductForm({ producto }: Props) {
 
     const onDelete = async (productId: string, images: string[]) => {
         try {
-            const respuesta = await myApi('/products', {
+            const respuesta = await fetch('/api/products', {
                 method: 'DELETE',
-                data: JSON.stringify({productId, images})
+                body: JSON.stringify({ productId, images })
             })
 
             if (respuesta.statusText !== 'OK') {
@@ -148,7 +155,7 @@ export default function ProductForm({ producto }: Props) {
 
     return (
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', m:1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', m: 1 }}>
 
             <form name='productForm' onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2} mb={1}>
@@ -331,7 +338,7 @@ export default function ProductForm({ producto }: Props) {
                                     error={!!errors.sizes}
                                 //helperText={errors.phone?.message}
                                 />
- 
+
                                 <TextField
                                     label="Costo"
                                     variant="outlined"

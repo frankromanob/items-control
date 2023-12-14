@@ -1,7 +1,7 @@
 
 import { IOrder } from '@/interfaces';
 import OrdersForm from './OrdersForm';
-import myApi from '@/app/lib/myApi';
+
 
 
 interface Props {
@@ -13,11 +13,12 @@ export default async function OrdersView({ orderId }: Props) {
 
     let order: IOrder | null
 
-    const { data, statusText, } = await myApi<IOrder>(`/orders/${orderId==='nuevo'?'':orderId}`)
-
+    const resp = await fetch(`${process.env.HOST_NAME}/api/orders/${orderId === 'nuevo' ? '' : orderId}`, { cache: 'no-store' })
+    if (!resp.ok) {
+        throw new Error('Error al cargar datos de pedidos')
+    }
     if (orderId !== 'nuevo') {
-        if (!data && statusText!=='OK') return <>{statusText}</>
-        order = data
+        order = await resp.json()
     } else {
         order = {
             _id: '',
@@ -27,7 +28,7 @@ export default async function OrdersView({ orderId }: Props) {
             customerPhone: '',
             status: 'Nuevo',
             orderItems: [
- 
+
             ],
             createdAt: '',
             updatedAt: ''
