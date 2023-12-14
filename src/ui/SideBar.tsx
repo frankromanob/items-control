@@ -6,13 +6,7 @@ import { logOut } from '../app/lib/user';
 import { useState, useEffect } from 'react';
 
 export const SideBar = () => {
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-    if (!mounted) {
-        return null; // return this null to avoid hydration errors
-    }
+
     const router = useRouter()
     const onHandleclick = (ruta: string) => {
         router.push(ruta)
@@ -22,7 +16,13 @@ export const SideBar = () => {
         logOut()
         router.push('/login')
     }
-
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+    if (!mounted) {
+        return null; // return this null to avoid hydration errors
+    }
     return (
         <Box sx={{ width: '190px' }}>
             <Typography sx={{ display: { xs: 'none', sm: 'block' }, marginInlineStart: 1 }} variant='h2' color='secondary'>
