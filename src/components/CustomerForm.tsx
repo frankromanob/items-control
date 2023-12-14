@@ -44,7 +44,7 @@ export default function CustomersForm({ customer }: Props) {
                 body: JSON.stringify(form)
             })
             setIsSaving(false)
-            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
+            if (!respuesta.ok) { throw new Error(respuesta.statusText) }
             alert('Cliente guardado correctamente.')
             router.replace('/clientes')
             router.refresh()
@@ -64,7 +64,7 @@ export default function CustomersForm({ customer }: Props) {
                 body: JSON.stringify(customerId)
             })
 
-            if (respuesta.statusText !== 'OK') {
+            if (!respuesta.ok ) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
             alert('Cliente eliminado correctamente')

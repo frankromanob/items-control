@@ -78,7 +78,7 @@ export default function EntriesForm({ entry }: Props) {
 
             setIsSaving(false)
 
-            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
+            if (!respuesta.ok) { throw new Error(respuesta.statusText) }
             alert('Entrada guardada correctamente.')
             router.replace('/entradas')
             router.refresh()
@@ -98,7 +98,7 @@ export default function EntriesForm({ entry }: Props) {
                 body: JSON.stringify(entryId)
             })
 
-            if (respuesta.statusText !== 'OK') {
+            if (!respuesta.ok) {
                 { throw new Error(respuesta.statusText) }
             }
             alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')

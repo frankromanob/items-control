@@ -119,7 +119,7 @@ export default function ProductForm({ producto }: Props) {
                 body: JSON.stringify(form)
             })
             setIsSaving(false)
-            if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
+            if (!respuesta.ok) { throw new Error(respuesta.statusText) }
             alert('Producto guardado correctamente.')
             router.replace('/productos')
         } catch (error) {
@@ -138,7 +138,7 @@ export default function ProductForm({ producto }: Props) {
                 body: JSON.stringify({ productId, images })
             })
 
-            if (respuesta.statusText !== 'OK') {
+            if (!respuesta.ok) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
             alert('Producto eliminado correctamente')
