@@ -79,7 +79,7 @@ export async function PUT(request: Request) {
     if (status == 'Completado') {
 
         try {
-            dbProducts.decreaseProductQuantity(orderItems)
+            await dbProducts.decreaseProductQuantity(orderItems)
 
         } catch (error) {
             console.log(error)

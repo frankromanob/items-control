@@ -41,7 +41,6 @@ export const decreaseProductQuantity = async (orderItems: IOrderItems[]) => {
         orderItems.map(async (item: IOrderItems, key) => {
             const productToUpdate = await Products.findById({ _id: item.product })
             if (productToUpdate) {
-                console.log(productToUpdate)
                 productToUpdate.inStock -= Number(item.quantity)
                 await productToUpdate.save({ validateBeforeSave: true })
             }
@@ -63,7 +62,6 @@ export const increaseProductQuantity = async (product: string, quantity: number)
     try {
         const productToUpdate = await Products.findById({ _id: product })
         if (productToUpdate) {
-            console.log(productToUpdate)
             productToUpdate.inStock += Number(quantity)
             await productToUpdate.save({ validateBeforeSave: true })
         }

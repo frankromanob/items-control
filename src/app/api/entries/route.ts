@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     })
 
     try {
-        dbProducts.increaseProductQuantity(product, Number(quantity))
+        await dbProducts.increaseProductQuantity(product, Number(quantity))
         newEntry.status='Completada'
         await newEntry.save({ validateBeforeSave: true })
 
