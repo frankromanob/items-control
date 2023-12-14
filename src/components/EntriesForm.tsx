@@ -67,7 +67,7 @@ export default function EntriesForm({ entry }: Props) {
         setIsSaving(true)
         try {
 
-            console.log(form)
+            //console.log(form)
             const respuesta = await fetch('/api/entries',{
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form),
