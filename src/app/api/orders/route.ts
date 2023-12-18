@@ -52,7 +52,6 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     const formData: IOrder = await request.json()
-    //console.log(formData)
     const {
         _id = '',
         customer = '',
@@ -83,6 +82,7 @@ export async function PUT(request: Request) {
 
         } catch (error) {
             console.log(error)
+            await db.disconnect()
             return new Response('Error al rebajar inventario', { status: 500 })
         }
 
@@ -100,6 +100,7 @@ export async function PUT(request: Request) {
         await order.save({ validateBeforeSave: true })
     } catch (error) {
         console.log(error)
+        await db.disconnect()
         return new Response('Error al enviar al servidor', { status: 500 })
     }
 

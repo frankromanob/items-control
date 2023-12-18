@@ -1,16 +1,14 @@
 import { db } from '@/database'
-import { ICustomer } from '@/interfaces'
 import Customers from '@/models/Customers'
 import { isValidObjectId } from 'mongoose'
 
 
-type Data =
-    | { message: string }
-    | ICustomer[]
+
 
 export async function GET() {
 
     await db.connect()
+   // console.log('buscando clientes:')
     const customers = await Customers.find().sort({ title: 'asc' }).lean()
 
     await db.disconnect()

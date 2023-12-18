@@ -6,8 +6,8 @@ import { v2 as cloudinary } from 'cloudinary'
 
 export async function GET() {
     await db.connect()
-
-    let products = await Products.find().sort({ title: 'asc' }).lean()
+   // console.log('buscando productos: ')
+    const products = await Products.find().sort({ title: 'asc' }).lean()
 
     await db.disconnect()
 

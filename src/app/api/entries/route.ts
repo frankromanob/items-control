@@ -17,7 +17,6 @@ export async function POST(request: Request) {
     const { id = '', product = '', productName = '', productSlug = '', productImage = '', quantity = 0, status = 'En proceso' } = formData
 
 
-    await db.connect()
 
     const newEntry = new Entries({
         product,
@@ -29,16 +28,18 @@ export async function POST(request: Request) {
     })
 
     try {
+        await db.connect()
         await dbProducts.increaseProductQuantity(product, Number(quantity))
-        newEntry.status='Completada'
+        newEntry.status = 'Completada'
         await newEntry.save({ validateBeforeSave: true })
+        await db.disconnect()
 
     } catch (error) {
         console.log(error)
+        await db.disconnect()
         return new Response('Error al enviar al servidor', { status: 500 })
     }
 
-    await db.disconnect()
     return Response.json(newEntry)
 
 }
@@ -72,16 +73,17 @@ export async function PUT(request: Request) {
 
 
     try {
+        await db.connect()
         dbProducts.increaseProductQuantity(product, Number(quantity))
         await entry.save({ validateBeforeSave: true })
+        await db.disconnect()
 
 
     } catch (error) {
         console.log(error)
+        await db.disconnect()
         return new Response('Error al enviar al servidor', { status: 500 })
     }
-
-    await db.disconnect()
     return Response.json(entry)
 
 }

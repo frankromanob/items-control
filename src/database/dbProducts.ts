@@ -35,42 +35,44 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
 
 
 export const decreaseProductQuantity = async (orderItems: IOrderItems[]) => {
-    await db.connect()
 
     try {
         orderItems.map(async (item: IOrderItems, key) => {
+           // await db.connect()
             const productToUpdate = await Products.findById({ _id: item.product })
             if (productToUpdate) {
                 productToUpdate.inStock -= Number(item.quantity)
-                await productToUpdate.save({ validateBeforeSave: true })
+                await productToUpdate.save()
             }
+          //  await db.disconnect()
         })
 
     } catch (error) {
         console.log(error)
+        //await db.disconnect()
         return new Response('Error al rebajar inventario', { status: 500 })
     }
 
 
-    await db.disconnect()
 }
 
 
 export const increaseProductQuantity = async (product: string, quantity: number) => {
-    await db.connect()
 
     try {
+        //await db.connect()
         const productToUpdate = await Products.findById({ _id: product })
         if (productToUpdate) {
             productToUpdate.inStock += Number(quantity)
-            await productToUpdate.save({ validateBeforeSave: true })
+            await productToUpdate.save()
         }
+       // await db.disconnect()
 
     } catch (error) {
         console.log(error)
+       // await db.disconnect()
         return new Response('Error al incrementar inventario', { status: 500 })
     }
 
 
-    await db.disconnect()
 }
