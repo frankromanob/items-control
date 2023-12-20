@@ -1,17 +1,26 @@
+'use client'
 import { Card, CardContent, Grid, Typography } from "@mui/material"
+import { useRouter } from "next/navigation"
 
 interface Props {
+    path:string
     title: string | number
     subTitle: string
     icon: JSX.Element
 }
 
-export const SummaryTile = ({ title, subTitle, icon }: Props) => {
+export const SummaryTile = ({ path, title, subTitle, icon }: Props) => {
+    const router = useRouter()
+    const onHandleclick = (ruta: string) => {
+        router.push(ruta)
+    }
     return (
-        <Grid item xs={12} sm={4} md={3}>
-            <Card sx={{ display: 'flex' }}>
+        <Grid item xs={12} sm={4} md={3} >
+            <div style={{display:'block', width:'100%',cursor:'pointer' }} onClick={() => onHandleclick(path)}>
 
-                <CardContent sx={{ width: 50, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Card sx={{ display: 'flex' }}  >
+
+                <CardContent  sx={{ width: 50, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     {icon}
                 </CardContent>
                 <CardContent sx={{ flex: '1 0 auto', display: 'flex', flexDirection: 'column' }}>
@@ -20,6 +29,7 @@ export const SummaryTile = ({ title, subTitle, icon }: Props) => {
 
                 </CardContent>
             </Card>
+            </div>
         </Grid>
     )
 }
