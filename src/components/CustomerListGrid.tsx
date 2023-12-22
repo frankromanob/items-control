@@ -40,7 +40,7 @@ export const CustomerListGrid = ({ customers }: { customers: ICustomer[] }) => {
 
     return (
         <Grid container className='fadeIn' >
-            <Grid item lg={12} xs={12} sx={{ height: 620, width: '100%' }}>
+            <Grid item lg={12} xs={12} sx={{ height: 620, width:{xs: '100vw', md:'100%'} }}>
                 <DataGrid sx={{
                     boxShadow: 2,
                     border: 1,

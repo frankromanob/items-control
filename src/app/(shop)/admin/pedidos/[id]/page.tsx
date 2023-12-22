@@ -7,7 +7,7 @@ export default function OrdersAdmin({ params }: { params: { id: string } }) {
 
   return (
 
-    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
 
       <Box display='flex' marginInlineStart='5px' justifyContent='space-between'  >
         <Typography color='secondary'>Pedido: {params.id}</Typography>
@@ -15,7 +15,7 @@ export default function OrdersAdmin({ params }: { params: { id: string } }) {
 
       <OrdersView orderId={params.id} />
 
-    </Box >
+    </div >
 
   )
 }

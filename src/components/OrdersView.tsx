@@ -1,6 +1,7 @@
 
 import { IOrder } from '@/interfaces';
 import OrdersForm from './OrdersForm';
+import { cookies } from 'next/headers';
 
 
 
@@ -11,9 +12,18 @@ interface Props {
 
 export default async function OrdersView({ orderId }: Props) {
 
+    const cookieStore = cookies()
+    const cookietoken = cookieStore.get('items-control-token')
+
     let order: IOrder | null
 
-    const resp = await fetch(`${process.env.HOST_NAME}/api/orders/${orderId === 'nuevo' ? '' : orderId}`, { cache: 'no-store' })
+    const resp = await fetch(`${process.env.HOST_NAME}/api/orders/${orderId === 'nuevo' ? '' : orderId}`,
+        {
+            cache: 'no-store',
+            headers: {
+                Cookie: `items-control-token=${cookietoken.value}`
+            }
+        })
     if (!resp.ok) {
         throw new Error('Error al cargar datos de pedidos')
     }

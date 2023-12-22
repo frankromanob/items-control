@@ -1,7 +1,6 @@
+
 import type { Metadata } from 'next'
-import FooterPage from '@/ui/Footer'
-import { SideBar } from '@/ui/SideBar'
-import { Box, CssBaseline, ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { mainTheme } from '@/ui/theme'
 
 
@@ -18,21 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <ThemeProvider theme={mainTheme}>
         <CssBaseline />
         <body >
-          <div>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-              <Box sx={{ width: { sm: '190px' }, display: 'flex', justifyContent: { xs: 'center' } }}>
-                <SideBar />
-              </Box>
-
-              <div style={{ display: 'flex' }} >
-                {children}
-              </div>
-            </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' }, }}>
-              <FooterPage />
-            </Box>
-          </div>
+            <div style={{ display: 'flex',   }} >
+              {children}
+            </div>
         </body>
       </ThemeProvider>
     </html>

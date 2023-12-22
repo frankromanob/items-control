@@ -9,7 +9,7 @@ export default function Entries() {
   revalidatePath('/entradas')
   return (
 
-    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
 
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, }}   >
         <Button
@@ -25,7 +25,7 @@ export default function Entries() {
       </Box>
 
       <EntriesList />
-    </Box>
+    </div>
 
   )
 }

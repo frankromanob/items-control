@@ -4,7 +4,10 @@ import { isValidToken } from './app/lib/jwt'
 
 
 export async function middleware(request: NextRequest) {
-    const cookieToken = request.cookies.get('items-control-token')
+
+
+    const cookieToken =  request.cookies.get('items-control-token')
+
     if (!cookieToken) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -17,6 +20,6 @@ export async function middleware(request: NextRequest) {
 
 
 export const config = {
-    matcher: ['/productos', '/admin/:path*', '/clientes', '/', '/pedidos', '/entradas'],
-
+    matcher: ['/productos', '/admin/:path*', '/clientes', '/', '/pedidos', '/entradas',
+        '/api/products/:path*', '/api/customers/:path*', '/api/orders/:path*', '/api/entries/:path*'],
 }

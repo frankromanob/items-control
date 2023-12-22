@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 
 
@@ -55,11 +56,10 @@ export default function ProductForm({ producto }: Props) {
         return () => subscription.unsubscribe()
     }, [watch, setValue])
 
-
-
-
     // Imagenes
 
+
+    const cookietoken = Cookies.get('items-control-token')
 
     const onDeleteImage = async (image: string) => {
         const images = getValues('images')
@@ -78,6 +78,9 @@ export default function ProductForm({ producto }: Props) {
                     {
                         method: 'POST',
                         body: formData,
+                        headers: {
+                            Cookie: `items-control-token=${cookietoken}`
+                        }
                     })
 
                 const data = await resp.json()
@@ -116,7 +119,10 @@ export default function ProductForm({ producto }: Props) {
         try {
             const respuesta = await fetch('/api/products', {
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                body: JSON.stringify(form),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
@@ -135,7 +141,10 @@ export default function ProductForm({ producto }: Props) {
         try {
             const respuesta = await fetch('/api/products', {
                 method: 'DELETE',
-                body: JSON.stringify({ productId, images })
+                body: JSON.stringify({ productId, images }),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
 
             if (!respuesta.ok) {

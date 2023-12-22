@@ -7,7 +7,7 @@ import { Box, Button } from '@mui/material'
 import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-
+import Cookies from 'js-cookie';
 
 
 
@@ -66,14 +66,21 @@ export default function EntriesForm({ order }: Props) {
         },
 
     ]
+
+    const cookietoken = Cookies.get('items-control-token')
     ////Product list
     useEffect(() => {
 
 
 
         const buscaProds = async () => {
-            const resp = await fetch('/api/products')
-            const data= await resp.json()
+            const resp = await fetch('/api/products',
+                {
+                    headers: {
+                        Cookie: `items-control-token=${cookietoken}`
+                    }
+                })
+            const data = await resp.json()
             setProductList(data)
         }
         buscaProds()
@@ -94,8 +101,13 @@ export default function EntriesForm({ order }: Props) {
 
 
         const buscaCustomers = async () => {
-            const resp = await fetch('/api/customers')
-            const data=await resp.json()
+            const resp = await fetch('/api/customers',
+                {
+                    headers: {
+                        Cookie: `items-control-token=${cookietoken}`
+                    }
+                })
+            const data = await resp.json()
             setCustomerList(data)
         }
         buscaCustomers()
@@ -120,13 +132,16 @@ export default function EntriesForm({ order }: Props) {
             form.status = 'En proceso'
             const respuesta = await fetch('/api/orders', {
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                body: JSON.stringify(form),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
             setIsSaving(false)
             //console.log(respuesta)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
             alert('Pedido guardado correctamente.')
-            const data=await respuesta.json()
+            const data = await respuesta.json()
             router.replace(`/admin/pedidos/${data._id}`)
         } catch (error) {
             setIsSaving(false)
@@ -144,7 +159,10 @@ export default function EntriesForm({ order }: Props) {
             form.status = 'Completado'
             const respuesta = await fetch('/api/orders', {
                 method: 'PUT',
-                body: JSON.stringify(form)
+                body: JSON.stringify(form),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
@@ -163,7 +181,10 @@ export default function EntriesForm({ order }: Props) {
         try {
             const respuesta = await fetch('/api/orders', {
                 method: 'DELETE',
-                body: JSON.stringify(orderId)
+                body: JSON.stringify(orderId),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
             //console.log(respuesta)
             if (!respuesta.ok) {

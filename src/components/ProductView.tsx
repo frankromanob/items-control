@@ -1,6 +1,7 @@
 
 import { IProduct } from '@/interfaces';
 import ProductForm from "@/components/ProductForm";
+import { cookies } from 'next/headers';
 
 
 interface Props {
@@ -8,7 +9,15 @@ interface Props {
 }
 
 export default async function ProductView({ slug }: Props) {
-    const resp = await fetch(`${process.env.HOST_NAME}/api/products/${slug === 'nuevo' ? '' : slug}`,{ cache: 'no-store' })
+    const cookieStore = cookies()
+    const cookietoken = cookieStore.get('items-control-token')
+    const resp = await fetch(`${process.env.HOST_NAME}/api/products/${slug === 'nuevo' ? '' : slug}`,
+        {
+            cache: 'no-store',
+            headers: {
+                Cookie: `items-control-token=${cookietoken.value}`
+            }
+        })
 
     if (!resp.ok) {
         throw new Error('Error al cargar datos de productos')

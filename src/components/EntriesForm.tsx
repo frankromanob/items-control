@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Box, Button } from '@mui/material'
 import { IEntry, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
-
+import Cookies from 'js-cookie';
 
 
 interface formData {
@@ -38,14 +38,19 @@ export default function EntriesForm({ entry }: Props) {
     const [productsLoaded, setProductsLoaded] = useState(false)
 
     const router = useRouter()
-
+    const cookietoken = Cookies.get('items-control-token')
     ////Product lists
     useEffect(() => {
 
 
         const buscaProds = async () => {
-            const resp = await fetch('/api/products')
-            const data= await resp.json()
+            const resp = await fetch('/api/products',
+                {
+                    headers: {
+                        Cookie: `items-control-token=${cookietoken}`
+                    }
+                })
+            const data = await resp.json()
             setProductList(data)
         }
         buscaProds()
@@ -68,11 +73,12 @@ export default function EntriesForm({ entry }: Props) {
         try {
 
             //console.log(form)
-            const respuesta = await fetch('/api/entries',{
+            const respuesta = await fetch('/api/entries', {
                 method: form._id ? 'PUT' : 'POST',
                 body: JSON.stringify(form),
                 headers: {
-                    'Content-Type': `multipart/form-data; `
+                    'Content-Type': `multipart/form-data; `,
+                    Cookie: `items-control-token=${cookietoken}`
                 }
             })
 
@@ -95,7 +101,10 @@ export default function EntriesForm({ entry }: Props) {
         try {
             const respuesta = await fetch('/api/entries', {
                 method: 'DELETE',
-                body: JSON.stringify(entryId)
+                body: JSON.stringify(entryId),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
 
             if (!respuesta.ok) {

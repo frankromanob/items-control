@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache'
 export default function ProductsPage() {
   revalidatePath('/productos')
   return (
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
 
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'flex-start' }}   >
           <Button
@@ -24,6 +24,6 @@ export default function ProductsPage() {
 
         <ProductsList />
 
-      </Box>
+      </div>
   )
 }

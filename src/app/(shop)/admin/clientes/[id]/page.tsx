@@ -7,7 +7,7 @@ export default function CustomersAdmin({ params }: { params: { id: string } }) {
 
   return (
 
-    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
 
       <Box display='flex' marginInlineStart='5px' justifyContent='space-between'  >
         <Typography color='secondary'>Cliente: {params.id}</Typography>
@@ -15,7 +15,7 @@ export default function CustomersAdmin({ params }: { params: { id: string } }) {
 
       <CustomerView customerId={params.id} />
 
-    </Box >
+    </div >
 
   )
 }

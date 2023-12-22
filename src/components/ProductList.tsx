@@ -1,12 +1,20 @@
 
 import { ProductListGrid } from './ProductListGrid';
+import { cookies } from 'next/headers'
 
 
 
 export const ProductsList = async () => {
-
-
-  const resp = await fetch(process.env.HOST_NAME + '/api/products', { cache: 'no-store' })
+  const cookieStore = cookies()
+  const cookietoken = cookieStore.get('items-control-token')
+  const resp = await fetch(process.env.HOST_NAME + '/api/products',
+    {
+      cache: 'no-store',
+      headers: {
+        Cookie: `items-control-token=${cookietoken.value}`
+      }
+    }
+  )
 
 
   if (!resp.ok) {

@@ -1,11 +1,21 @@
 
+import { cookies } from 'next/headers';
 import EntriesListGrid from './EntriesListGrid';
 
 
 
-export const EntriesList = async() => {
+export const EntriesList = async () => {
 
-  const resp = await fetch(process.env.HOST_NAME + '/api/entries',{cache:'no-store'})
+  const cookieStore = cookies()
+  const cookietoken = cookieStore.get('items-control-token')
+
+  const resp = await fetch(process.env.HOST_NAME + '/api/entries',
+    {
+      cache: 'no-store',
+      headers: {
+        Cookie: `items-control-token=${cookietoken.value}`
+      }
+    })
 
   if (!resp.ok) {
     throw new Error('Error al cargar datos de entradas')
@@ -13,7 +23,7 @@ export const EntriesList = async() => {
   const data = await resp.json()
 
   return (
-    <EntriesListGrid entries={data}/>
+    <EntriesListGrid entries={data} />
   )
 }
 

@@ -7,7 +7,7 @@ export default function ProductsAdmin({ params }: { params: { slug: string } }) 
 
   return (
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+      <div style={{ display: 'flex', flexDirection: 'column', }}>
 
         <Box display='flex'  >
           <Typography color='secondary'>Producto: {params.slug}</Typography>
@@ -17,7 +17,7 @@ export default function ProductsAdmin({ params }: { params: { slug: string } }) 
         <ProductView slug={params.slug} />
 
 
-      </Box >
+      </div >
   )
 }
 

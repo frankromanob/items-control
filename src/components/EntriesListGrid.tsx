@@ -73,7 +73,7 @@ export const EntriesListGrid = ({entries}:{entries:IEntry[]}) => {
   return (
     <>
       <Grid container className='fadeIn' >
-        <Grid item lg={12} xs={12} sx={{ height: 650, width: '100%' }}>
+        <Grid item lg={12} xs={12} sx={{ height: 650, width:{xs: '100vw', md:'100%'} }}>
           <DataGrid sx={{
             boxShadow: 2,
             border: 1,

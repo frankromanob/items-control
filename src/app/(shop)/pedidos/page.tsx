@@ -1,29 +1,28 @@
 
-import CustomerList from '@/components/CustomerList'
+import OrdersList from '@/components/OrdersList'
 import { AddOutlined } from '@mui/icons-material'
 import { Box, Button } from '@mui/material'
 import { revalidatePath } from 'next/cache'
 
-export default function Customers() {
-  revalidatePath('/clientes')
+export default function Orders() {
+  revalidatePath('/pedidos')
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
 
+    <div style={{ display: 'flex', flexDirection: 'column', }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, }}   >
         <Button
           size='small'
           sx={{ height: '20px', width: '200px', mb: 1 }}
           startIcon={<AddOutlined />}
           color='secondary'
-          href='/admin/clientes/nuevo'
+          href='/admin/pedidos/nuevo'
         >
-          Agregar Cliente
+          Nuevo pedido
         </Button>
-
       </Box>
 
-      <CustomerList />
-    </Box>
+      <OrdersList />
+    </div>
 
   )
 }

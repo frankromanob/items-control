@@ -1,7 +1,7 @@
 import { db } from "@/database"
 import Users from '@/models/Users'
 import bcrypt from 'bcryptjs';
-import { jwt } from '@/app/lib/'
+import { jwt } from '@/app/lib'
 
 
 

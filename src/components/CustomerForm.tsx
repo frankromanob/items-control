@@ -7,7 +7,7 @@ import { Box, Button } from '@mui/material'
 import { ICustomer } from '@/interfaces';
 import { validations } from '@/utils';
 import { useRouter } from 'next/navigation';
-
+import Cookies from 'js-cookie';
 
 
 interface formData {
@@ -25,6 +25,7 @@ interface Props {
 
 
 export default function CustomersForm({ customer }: Props) {
+
     const [isSaving, setIsSaving] = useState(false)
     const router = useRouter()
     const { register, handleSubmit, formState: { errors }, getValues, setValue, watch } =
@@ -32,6 +33,7 @@ export default function CustomersForm({ customer }: Props) {
             defaultValues: customer
         })
 
+    const cookietoken = Cookies.get('items-control-token')
 
     const onSubmit = async (form: formData) => {
 
@@ -41,7 +43,10 @@ export default function CustomersForm({ customer }: Props) {
         try {
             const respuesta = await fetch('/api/customers', {
                 method: form._id ? 'PUT' : 'POST',
-                body: JSON.stringify(form)
+                body: JSON.stringify(form),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
@@ -61,10 +66,13 @@ export default function CustomersForm({ customer }: Props) {
         try {
             const respuesta = await fetch('/api/customers', {
                 method: 'DELETE',
-                body: JSON.stringify(customerId)
+                body: JSON.stringify(customerId),
+                headers: {
+                    Cookie: `items-control-token=${cookietoken}`
+                }
             })
 
-            if (!respuesta.ok ) {
+            if (!respuesta.ok) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
             alert('Cliente eliminado correctamente')
