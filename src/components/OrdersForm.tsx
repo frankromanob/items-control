@@ -8,6 +8,7 @@ import { ICustomer, IOrder, IOrderItems, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 
 
@@ -140,7 +141,17 @@ export default function EntriesForm({ order }: Props) {
             setIsSaving(false)
             //console.log(respuesta)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
-            alert('Pedido guardado correctamente.')
+            //alert('Pedido guardado correctamente.')
+            toast.success('Pedido guardado correctamente.', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             const data = await respuesta.json()
             router.replace(`/admin/pedidos/${data._id}`)
         } catch (error) {
@@ -166,7 +177,17 @@ export default function EntriesForm({ order }: Props) {
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
-            alert('Pedido procesado correctamente.')
+            //alert('Pedido procesado correctamente.')
+            toast.success('Pedido procesado correctamente', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             router.replace('/pedidos')
             router.refresh()
         } catch (error) {
@@ -178,6 +199,10 @@ export default function EntriesForm({ order }: Props) {
 
 
     const onDelete = async (orderId: string) => {
+        const confirmDelete = confirm("Desea eliminar el pedido?")
+        if (!confirmDelete) {
+            return
+        }
         try {
             const respuesta = await fetch('/api/orders', {
                 method: 'DELETE',
@@ -191,7 +216,18 @@ export default function EntriesForm({ order }: Props) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
 
-            alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
+            //alert('Pedido eliminado correctamente. Nota: esto no afecta la existencia')
+            toast.warn('Pedido eliminado correctamente. Nota: esto no afecta el inventario', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+
             router.replace('/pedidos')
             router.refresh()
         } catch (error) {
@@ -259,7 +295,7 @@ export default function EntriesForm({ order }: Props) {
 
                     <form name='entryForm' onSubmit={handleSubmit(onSubmit)} >
                         <Grid container spacing={2} mt={1}>
-                            <Grid item xs={12} >
+                            <Grid item xs={10} sm={12}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', mb: 1 }}>
                                         <TextField

@@ -13,8 +13,11 @@ export const SideBar = () => {
     }
 
     const logOff = () => {
-        logOut()
-        router.push('/login')
+        const confirmLogOut = confirm("Desea cerrar la sesión?")
+        if (confirmLogOut) {
+            logOut()
+            router.push('/login')
+        }
     }
     const [mounted, setMounted] = useState(false);
     useEffect(() => {

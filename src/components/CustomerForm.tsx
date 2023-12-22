@@ -8,6 +8,7 @@ import { ICustomer } from '@/interfaces';
 import { validations } from '@/utils';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 
 interface formData {
@@ -50,7 +51,17 @@ export default function CustomersForm({ customer }: Props) {
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
-            alert('Cliente guardado correctamente.')
+
+            toast.success('Cliente guardado correctamente', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
             router.replace('/clientes')
             router.refresh()
         } catch (error) {
@@ -63,6 +74,11 @@ export default function CustomersForm({ customer }: Props) {
 
 
     const onDelete = async (customerId: string) => {
+        const confirmDelete = confirm("Desea eliminar el cliente?")
+        if (!confirmDelete) {
+            return
+        }
+
         try {
             const respuesta = await fetch('/api/customers', {
                 method: 'DELETE',
@@ -75,7 +91,17 @@ export default function CustomersForm({ customer }: Props) {
             if (!respuesta.ok) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
-            alert('Cliente eliminado correctamente')
+
+            toast.warn('Cliente eliminado correctamente', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
 
             router.replace('/clientes')
             router.refresh()
@@ -91,7 +117,7 @@ export default function CustomersForm({ customer }: Props) {
 
             <form name='customerForm' onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2} mt={1}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={6}>
                         <TextField
                             label="Nombre"
                             variant='outlined'

@@ -7,6 +7,7 @@ import { Box, Button } from '@mui/material'
 import { IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 
 
@@ -126,7 +127,17 @@ export default function ProductForm({ producto }: Props) {
             })
             setIsSaving(false)
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
-            alert('Producto guardado correctamente.')
+            //alert('Producto guardado correctamente.')
+            toast.success('Producto guardado correctamente.', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             router.replace('/productos')
         } catch (error) {
             setIsSaving(false)
@@ -138,6 +149,10 @@ export default function ProductForm({ producto }: Props) {
 
 
     const onDelete = async (productId: string, images: string[]) => {
+        const confirmDelete = confirm("Desea eliminar el producto?")
+        if (!confirmDelete) {
+            return
+        }
         try {
             const respuesta = await fetch('/api/products', {
                 method: 'DELETE',
@@ -150,7 +165,17 @@ export default function ProductForm({ producto }: Props) {
             if (!respuesta.ok) {
                 if (respuesta.statusText !== 'OK') { throw new Error(respuesta.statusText) }
             }
-            alert('Producto eliminado correctamente')
+            //alert('Producto eliminado correctamente')
+            toast.warn('Producto eliminado correctamente.', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
             router.replace('/productos')
             router.refresh()
 

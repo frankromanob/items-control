@@ -7,6 +7,7 @@ import { Box, Button } from '@mui/material'
 import { IEntry, IProduct } from '@/interfaces';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 
 interface formData {
@@ -85,7 +86,17 @@ export default function EntriesForm({ entry }: Props) {
             setIsSaving(false)
 
             if (!respuesta.ok) { throw new Error(respuesta.statusText) }
-            alert('Entrada guardada correctamente.')
+            //alert('Entrada guardada correctamente.')
+            toast.success('Entrada guardada correctamente.  Se incrementó la existencia del producto ', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
             router.replace('/entradas')
             router.refresh()
         } catch (error) {
@@ -98,6 +109,10 @@ export default function EntriesForm({ entry }: Props) {
 
 
     const onDelete = async (entryId: string) => {
+        const confirmDelete = confirm("Desea eliminar la entrada?")
+        if (!confirmDelete) {
+            return
+        }
         try {
             const respuesta = await fetch('/api/entries', {
                 method: 'DELETE',
@@ -110,7 +125,17 @@ export default function EntriesForm({ entry }: Props) {
             if (!respuesta.ok) {
                 { throw new Error(respuesta.statusText) }
             }
-            alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')
+            //  alert('Entrada eliminada correctamente. Nota: esto no rebaja la existencia')
+            toast.warn('Entrada eliminada correctamente. Nota: esto no rebaja la existencia', {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
 
             router.replace('/entradas')
             router.refresh()
